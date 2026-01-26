@@ -713,4 +713,208 @@
         suv:       { rate: 19.00, bata: 400 },
         innova:    { rate: 20.00, bata: 400 }
       },
-     
+           minimumKm: { Oneway: 130, "Round Trip": 250 } // per day for round trip
+    };
+  
+    const HILL_KEYWORDS = ["ooty","kodaikanal","kodai","munnar","yercaud","valparai"];
+  
+    function fmtINR(n){
+      return "₹" + Number(n).toLocaleString("en-IN", {
+        maximumFractionDigits: (Number(n)%1===0?0:2)
+      });
+    }
+  
+    // ------------ MAPS / AUTOCOMPLETE ------------
+    let gmapsReady=false, distanceService=null, geocoder=null, pickupAuto=null, dropAuto=null;
+  
+<script>
+/* ---------------- MAP INIT CONTINUED ---------------- */
+function initMaps(){
+  try{
+    pickupAuto = new google.maps.places.Autocomplete(el("pickup"), { types:["geocode"] });
+    dropAuto   = new google.maps.places.Autocomplete(el("drop"),   { types:["geocode"] });
+
+    distanceService = new google.maps.DistanceMatrixService();
+    geocoder = new google.maps.Geocoder();
+    gmapsReady = true;
+  }catch(e){
+    console.warn("Maps init failed", e);
+    gmapsReady = false;
+  }
+}
+
+/* ---------------- NAV DRAWER ---------------- */
+const body = document.body;
+el("menuBtn").onclick = () => body.classList.add("nav-open");
+el("navClose").onclick = closeNav;
+el("navBackdrop").onclick = closeNav;
+
+function closeNav(){
+  body.classList.remove("nav-open");
+}
+
+/* ---------------- TRIP TYPE ---------------- */
+el("onewayBtn").onclick = () => setTrip("Oneway");
+el("roundBtn").onclick  = () => setTrip("Round Trip");
+
+function setTrip(type){
+  el("tripType").value = type;
+  el("onewayBtn").classList.toggle("active", type==="Oneway");
+  el("roundBtn").classList.toggle("active", type==="Round Trip");
+  el("returnRow").style.display = type==="Round Trip" ? "block" : "none";
+}
+
+/* ---------------- GEO LOCATION ---------------- */
+el("useLocationBtn").onclick = () => {
+  if(!navigator.geolocation) return alert("Geolocation not supported");
+  el("useLocationBtn").setAttribute("aria-busy","true");
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const latlng = {lat:pos.coords.latitude,lng:pos.coords.longitude};
+    geocoder.geocode({location:latlng},(res)=>{
+      if(res && res[0]) el("pickup").value = res[0].formatted_address;
+      el("useLocationBtn").setAttribute("aria-busy","false");
+    });
+  });
+};
+
+/* ---------------- ESTIMATE ---------------- */
+el("estimateBtn").onclick = estimateFare;
+
+function estimateFare(){
+  if(!gmapsReady) return alert("Google Maps not ready");
+
+  const pickup = el("pickup").value.trim();
+  const drop   = el("drop").value.trim();
+  if(!pickup || !drop) return alert("Enter pickup & drop");
+
+  distanceService.getDistanceMatrix({
+    origins:[pickup],
+    destinations:[drop],
+    travelMode:"DRIVING"
+  },res=>{
+    const km = Math.ceil(res.rows[0].elements[0].distance.value / 1000);
+    calculateFare(km);
+  });
+}
+
+function calculateFare(km){
+  const trip = el("tripType").value;
+  const car  = el("car").value;
+  const tariff = TARIFFS[trip][car];
+  const minKm  = TARIFFS.minimumKm[trip];
+  const billKm = Math.max(km, minKm);
+
+  const distFare = billKm * tariff.rate;
+  const total = distFare + tariff.bata;
+
+  el("routeTitle").innerText =
+    `${el("pickup").value} → ${el("drop").value} (${trip})`;
+
+  el("fareAmount").innerText = total.toLocaleString("en-IN");
+  el("uptoKmDisplay").innerText = billKm + " km";
+  el("extraKmFare").innerText = tariff.rate;
+  el("bdKm").innerText = billKm + " km";
+  el("distFare").innerText = fmtINR(distFare);
+  el("driverBata").innerText = fmtINR(tariff.bata);
+  el("totalFareSmall").innerText = fmtINR(total);
+
+  el("farePremiumCard").style.display = "block";
+  el("farePremiumCard").scrollIntoView({
+  behavior: "smooth",
+  block: "center"
+});
+}
+
+/* ---------------- BREAKDOWN TOGGLE ---------------- */
+el("fareBreakToggle").onclick = ()=>{
+  el("fareBreakBody").classList.toggle("open");
+  el("fareBreakArrow").classList.toggle("rotate");
+};
+
+/* ---------------- BOOK NOW ---------------- */
+function bookNowPro(){
+const bookingId = generateBookingID();
+
+const msg =
+`🚕 *DropTaxi Booking*
+🆔 Booking ID: ${bookingId}
+
+Trip: ${el("tripType").value}
+From: ${el("pickup").value}
+To: ${el("drop").value}
+Date: ${el("date").value} ${el("time").value}
+Car: ${el("car").value}
+Fare: ${el("totalFareSmall").innerText}
+Phone: ${el("phone").value}`; =
+`🚕 *DropTaxi Booking*
+Trip: ${el("tripType").value}
+From: ${el("pickup").value}
+To: ${el("drop").value}
+Date: ${el("date").value} ${el("time").value}
+Car: ${el("car").value}
+Fare: ${el("totalFareSmall").innerText}
+Phone: ${el("phone").value}`;
+
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`);
+}
+
+/* ---------------- FLOATING BUTTONS ---------------- */
+el("floatingWhatsApp").onclick = ()=>window.open(`https://wa.me/${WA_NUMBER}`);
+el("floatingCall").onclick = ()=>location.href = CALL_NUMBER;
+
+/* ---------------- LOAD MAPS ---------------- */
+const s = document.createElement("script");
+s.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyB79memjL-rc3k49TKKW8hauHoY1EUHrTM&libraries=places&callback=initMaps";
+s.async = true;
+document.head.appendChild(s);
+<script>
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyb50XEKPuIY1BOMVsQwIlcPuwdyTFajmtXwl8zYyiQsPJKMEZ8epmJN6pOrA0l5yEU/exec";
+
+const el = id => document.getElementById(id);
+
+function generateBookingId() {
+  return "DT-" + Math.floor(100000 + Math.random() * 900000);
+}
+
+function bookNowPro() {
+
+  const bookingId = generateBookingId();
+  const tripTypeValue = el("tripType").value;
+
+  const data = {
+    bookingId: bookingId,
+    tripType: tripTypeValue,
+    pickup: el("pickup").value,
+    drop: el("drop").value,
+    date: el("date").value,
+    time: el("time").value,
+    returnDate: el("returnDate").value || "NA",
+    totalDays: tripTypeValue === "Round Trip" ? "5" : "1",
+    car: el("car").options[el("car").selectedIndex].text,
+    km: el("uptoKmDisplay") ? el("uptoKmDisplay").innerText.replace(" km","") : "0",
+    rate: el("extraKmFare") ? el("extraKmFare").innerText : "0",
+    bata: el("driverBata") ? el("driverBata").innerText.replace("₹","") : "0",
+    totalFare: el("fareAmount") ? el("fareAmount").innerText.replace(/,/g,"") : "0",
+    phone: el("phone").value
+  };
+
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(() => {
+    alert(
+      "Booking Confirmed!\n\n" +
+      "Booking ID: " + bookingId
+    );
+  })
+  .catch(err => {
+    alert("Booking failed. Please try again.");
+    console.error(err);
+  });
+}
+</script>
+</body>
+</html>
