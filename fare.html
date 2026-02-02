@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fare</title>
+<style>
+body{font-family:Arial;background:#f3f3f3;margin:0}
+.card{background:#fff;margin:16px;padding:18px;border-radius:26px}
+.price{font-size:24px;color:#0a9d00;font-weight:bold}
+.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee}
+.book-btn{width:100%;margin-top:14px;padding:16px;background:#ffc107;border:none;border-radius:30px;font-size:18px;font-weight:bold}
+</style>
+</head>
+
+<body>
+<div id="cards"></div>
+
+<script>
+const trip=JSON.parse(localStorage.getItem("trip"));
+const cars=[
+ {name:"Dzire",rate:14,bata:400},
+ {name:"Etios",rate:15,bata:400},
+ {name:"SUV",rate:19,bata:500},
+ {name:"Innova",rate:20,bata:500}
+];
+
+cars.forEach(c=>{
+ const fare=(trip.km*c.rate)+c.bata;
+ cards.innerHTML+=`
+ <div class="card">
+  <h3>${c.name}</h3>
+  <div class="price">₹ ${fare}</div>
+  <div class="row"><span>Included Km</span><span>${trip.km} Km</span></div>
+  <div class="row"><span>Extra fare / Km</span><span>₹${c.rate}/Km</span></div>
+  <div class="row"><span>Fuel Charges</span><span>Included</span></div>
+  <div class="row"><span>Driver Charges</span><span>Included</span></div>
+  <p>Toll, Parking, Permit, Carrier, Pet Charges Extra</p>
+  <button class="book-btn" onclick="confirm('${c.name}',${fare})">Book Now</button>
+ </div>`;
+});
+
+function confirm(car,fare){
+ localStorage.setItem("confirm",JSON.stringify({
+  bookingId:"DT"+Math.floor(Math.random()*100000),
+  car:car,
+  fare:fare
+ }));
+ location.href="confirm.html";
+}
+</script>
+</body>
+</html>
