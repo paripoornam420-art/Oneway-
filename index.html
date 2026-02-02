@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Way Taxi</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:#f3f3f3;
+}
+
+/* HEADER */
+.header{
+  background:#063b3b;
+  color:#ffd400;
+  text-align:center;
+  padding:14px;
+  font-size:26px;
+  font-weight:700;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  margin:16px;
+  padding:18px;
+  border-radius:26px;
+}
+
+/* TOGGLE */
+.toggle{
+  display:flex;
+  background:#eee;
+  border-radius:30px;
+  padding:4px;
+}
+.toggle button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:26px;
+  font-size:16px;
+  font-weight:600;
+  background:transparent;
+}
+.toggle .active{
+  background:#ffc107;
+}
+
+/* INPUT */
+.input{
+  width:100%;
+  margin-top:14px;
+  padding:16px;
+  border-radius:22px;
+  border:1px solid #e0e0e0;
+  background:#f5f5f5;
+  font-size:16px;
+}
+
+/* LOCATION STATUS */
+.loc-status{
+  display:none;
+  margin-top:8px;
+  padding:10px 14px;
+  border-radius:18px;
+  background:#fff3cd;
+  color:#856404;
+  font-size:14px;
+}
+
+/* DATE + TIME (MERGED LOOK) */
+.dt-row{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+.dt-row .input{
+  margin-top:0;
+}
+
+/* BUTTON */
+.main-btn{
+  margin-top:22px;
+  width:100%;
+  padding:18px;
+  background:#ffc107;
+  border:none;
+  border-radius:40px;
+  font-size:20px;
+  font-weight:700;
+}
+
+/* FARE CARD */
+.fare-card{
+  background:#fff;
+  margin:16px;
+  padding:18px;
+  border-radius:26px;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+.fare-card h3{margin:0 0 6px}
+.fare-card p{margin:4px 0}
+.book-btn{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  background:#063b3b;
+  color:#fff;
+  border:none;
+  border-radius:18px;
+  font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">ONE WAY TAXI</div>
+
+<div class="card">
+
+  <!-- ONE WAY / ROUND TRIP -->
+  <div class="toggle">
+    <button class="active">One Way</button>
+    <button>Round Trip</button>
+  </div>
+
+  <!-- PICKUP -->
+  <input class="input" id="pickup" placeholder="Pickup Location">
+  <div id="locStatus" class="loc-status">🟡 Location detecting…</div>
+  <input class="input" type="button" value="📍 Use My Current Location" onclick="useCurrentLocation()">
+
+  <!-- DROP -->
+  <input class="input" id="drop" placeholder="Final Drop Location">
+
+  <!-- DATE & TIME (SAME AS IMAGE) -->
+  <div class="dt-row">
+    <input class="input" id="date" type="date">
+    <input class="input" id="time" type="time">
+  </div>
+
+  <!-- MOBILE -->
+  <input class="input" id="mobile" maxlength="10" placeholder="+91 Enter mobile number">
+
+  <button class="main-btn" onclick="calculateDistance()">Check Price & Book Cab</button>
+</div>
+
+<div id="fareCards"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places"></script>
+
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyb50XEKPuIY1BOMVsQwIlcPuwdyTFajmtXwl8zYyiQsPJKMEZ8epmJN6pOrA0l5yEU/exec";
+let geocoder, distanceService;
+
+function initMaps(){
+  new google.maps.places.Autocomplete(pickup);
+  new google.maps.places.Autocomplete(drop);
+  geocoder=new google.maps.Geocoder();
+  distanceService=new google.maps.DistanceMatrixService();
+}
+window.onload=initMaps;
+
+function useCurrentLocation(){
+  locStatus.style.display="block";
+  navigator.geolocation.getCurrentPosition(pos=>{
+    geocoder.geocode(
+      {location:{lat:pos.coords.latitude,lng:pos.coords.longitude}},
+      res=>{
+        pickup.value=res[0].formatted_address;
+        locStatus.style.display="none";
+      }
+    );
+  });
+}
+
+function calculateDistance(){
+  if(!/^[6-9]\d{9}$/.test(mobile.value)){
+    alert("Enter valid mobile number");
+    return;
+  }
+
+  distanceService.getDistanceMatrix({
+    origins:[pickup.value],
+    destinations:[drop.value],
+    travelMode:"DRIVING",
+    unitSystem:google.maps.UnitSystem.METRIC
+  },res=>{
+    const km=Math.round(res.rows[0].elements[0].distance.value/1000);
+    const duration=res.rows[0].elements[0].duration.text;
+    showFareCards(km,duration);
+  });
+}
+
+function showFareCards(km,duration){
+  const cars=[
+    {name:"Dzire",rate:14,bata:400,upto:245},
+    {name:"Etios",rate:15,bata:400,upto:245},
+    {name:"SUV",rate:19,bata:500,upto:245},
+    {name:"Innova",rate:20,bata:500,upto:245}
+  ];
+  fareCards.innerHTML="";
+  cars.forEach(c=>{
+    const fare=Math.round(km*c.rate+c.bata);
+    fareCards.innerHTML+=`
+      <div class="fare-card">
+        <h3>${pickup.value} → ${drop.value}</h3>
+        <p>Distance: ${km} km | Duration: ${duration}</p>
+        <p><b>₹${fare}</b> Approximate Fare</p>
+        <p>${c.name} - ${c.rate} + Bata Rs.${c.bata}</p>
+        <p>Upto ${c.upto} Km</p>
+        <p>Toll, Parking, Permit, Carrier, Pet Charges Extra</p>
+        <button class="book-btn" onclick="sendMail('search','${c.name}',${c.rate},${c.bata},${fare},${c.upto})">Check Fare</button>
+        <button class="book-btn" onclick="sendMail('book','${c.name}',${c.rate},${c.bata},${fare},${c.upto})">Book Now</button>
+      </div>`;
+  });
+}
+
+function sendMail(type,car,rate,bata,fare,upto){
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      type:type,
+      route:`${pickup.value} to ${drop.value}`,
+      mobile:mobile.value,
+      datetime:`${date.value} - ${time.value}`,
+      car:`${car} - ${rate} + Bata Rs.${bata}`,
+      fare:fare,
+      uptoKm:upto,
+      mapLink:"https://maps.app.goo.gl/JVzPtso4k8doje3VA"
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    alert((type==="search"?"Searching sent":"Booking confirmed")+"\nBooking ID: "+d.bookingId);
+  });
+}
+</script>
+
+</body>
+</html>
