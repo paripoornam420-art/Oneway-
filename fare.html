@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxi Fare</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:#f2f2f2;
+}
+
+/* HEADER */
+.header{
+  background:#0b3c5d;
+  color:#fff;
+  padding:16px;
+  font-size:20px;
+  font-weight:700;
+  text-align:center;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  margin:16px;
+  padding:18px;
+  border-radius:18px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+
+/* TITLE */
+.car-name{
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+/* PRICE */
+.price{
+  font-size:28px;
+  font-weight:800;
+  color:#1e9c45;
+  margin-bottom:10px;
+}
+
+/* ROWS */
+.row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid #eee;
+  font-size:15px;
+}
+.row:last-child{border-bottom:none}
+
+/* INFO */
+.note{
+  margin-top:12px;
+  font-size:14px;
+  color:#555;
+}
+
+/* BOOK */
+.book-btn{
+  margin-top:16px;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  background:#ffcc00;
+  font-size:18px;
+  font-weight:700;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Available Taxi Fares</div>
+
+<div id="fareList"></div>
+
+<script>
+/* GET DATA FROM INDEX */
+const trip = JSON.parse(localStorage.getItem("tripKm")) || {};
+const km = trip || 0;
+
+/* CAR TARIFFS */
+const cars = [
+  {name:"Dzire / Etios", rate:14, bata:400},
+  {name:"Sedan Premium", rate:15, bata:400},
+  {name:"SUV (6+1)", rate:19, bata:500},
+  {name:"Innova / Crysta", rate:20, bata:500}
+];
+
+cars.forEach(c=>{
+  const total = (km * c.rate) + c.bata;
+
+  fareList.innerHTML += `
+    <div class="card">
+      <div class="car-name">${c.name}</div>
+      <div class="price">₹ ${total}</div>
+
+      <div class="row">
+        <span>Included Km</span>
+        <strong>Upto ${km} Km</strong>
+      </div>
+
+      <div class="row">
+        <span>Extra Fare / Km</span>
+        <strong>₹ ${c.rate} / Km</strong>
+      </div>
+
+      <div class="row">
+        <span>Fuel Charges</span>
+        <strong>Included</strong>
+      </div>
+
+      <div class="row">
+        <span>Driver Charges</span>
+        <strong>Included</strong>
+      </div>
+
+      <div class="row">
+        <span>Night Charges</span>
+        <strong>Included</strong>
+      </div>
+
+      <div class="note">
+        Toll, Parking, Permit, Carrier, Pet Charges Extra
+      </div>
+
+      <button class="book-btn" onclick="bookNow('${c.name}', ${total})">
+        Book Now
+      </button>
+    </div>
+  `;
+});
+
+/* BOOK NOW */
+function bookNow(car, fare){
+  const bookingId = "DT" + Math.floor(100000 + Math.random()*900000);
+
+  localStorage.setItem("booking", JSON.stringify({
+    bookingId: bookingId,
+    car: car,
+    fare: fare,
+    km: km
+  }));
+
+  window.location.href = "confirm.html";
+}
+</script>
+
+</body>
+</html>

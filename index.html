@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxi Estimate</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:#f2f2f2;
+}
+
+/* HEADER */
+.header{
+  background:#fff;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+.header img{
+  height:42px;
+}
+
+/* FORM CARD */
+.wrapper{
+  background:#fff;
+  margin:16px;
+  padding:18px;
+  border-radius:22px;
+}
+
+/* TOGGLE */
+.toggle{
+  display:flex;
+  gap:10px;
+}
+.toggle button{
+  flex:1;
+  padding:14px;
+  border-radius:14px;
+  border:2px solid #ddd;
+  font-size:16px;
+  font-weight:600;
+  background:#fff;
+}
+.toggle .active{
+  background:#ffcc00;
+  border-color:#000;
+}
+
+/* LABEL */
+label{
+  display:block;
+  margin-top:16px;
+  font-size:14px;
+  color:#555;
+}
+
+/* INPUT */
+.input{
+  width:100%;
+  padding:14px;
+  margin-top:6px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  background:#f6f6f6;
+  font-size:16px;
+}
+
+/* CURRENT LOCATION */
+.loc-btn{
+  margin-top:12px;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  background:#1e9c45;
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  white-space:nowrap;
+}
+
+/* DATE TIME */
+.dt{
+  display:flex;
+  gap:10px;
+}
+
+/* ADD STOP */
+#addStop{
+  margin-top:10px;
+  color:#1a73e8;
+  font-weight:600;
+  display:none;
+}
+
+/* RETURN DATE */
+#returnBox{display:none}
+
+/* BUTTON */
+.submit-btn{
+  margin-top:22px;
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:14px;
+  background:#1e9c45;
+  color:#fff;
+  font-size:18px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.submit-btn:disabled{opacity:.7}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER WITH LOGO -->
+<div class="header">
+  <img src="https://i.imgur.com/QZ6xZzQ.png" alt="DropTaxi Tamilnadu">
+</div>
+
+<div class="wrapper">
+
+  <!-- TOGGLE -->
+  <div class="toggle">
+    <button id="oneBtn" class="active" onclick="setTrip('one')">Oneway</button>
+    <button id="roundBtn" onclick="setTrip('round')">Round Trip</button>
+  </div>
+
+  <!-- PICKUP -->
+  <label>Pickup Location</label>
+  <input class="input" id="pickup" placeholder="Enter pickup location">
+
+  <button class="loc-btn" onclick="useCurrentLocation()">📍 Use My Current Location</button>
+
+  <!-- STOPS -->
+  <div id="stops"></div>
+  <div id="addStop" onclick="addStop()">+ Add Stop</div>
+
+  <!-- DROP -->
+  <label>Drop Location</label>
+  <input class="input" id="drop" placeholder="Enter drop location">
+
+  <!-- DATE TIME -->
+  <div class="dt">
+    <div style="flex:1">
+      <label>Date</label>
+      <input class="input" type="date" id="date">
+    </div>
+    <div style="flex:1">
+      <label>Time</label>
+      <input class="input" type="time" id="time">
+    </div>
+  </div>
+
+  <!-- RETURN DATE -->
+  <div id="returnBox">
+    <label>Return Date (for Round Trip)</label>
+    <input class="input" type="date" id="returnDate">
+  </div>
+
+  <!-- CONTACT -->
+  <label>Contact Number</label>
+  <input class="input" id="mobile" placeholder="Enter your mobile number" maxlength="10">
+
+  <button class="submit-btn" id="submitBtn" onclick="calculateKM()">
+    Check Fare and Book Cab
+  </button>
+
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places"></script>
+
+<script>
+let tripType="one";
+let geocoder, directionsService;
+let locked=false;
+
+function initMaps(){
+  new google.maps.places.Autocomplete(pickup);
+  new google.maps.places.Autocomplete(drop);
+  geocoder=new google.maps.Geocoder();
+  directionsService=new google.maps.DirectionsService();
+}
+window.onload=initMaps;
+
+function setTrip(t){
+  tripType=t;
+  oneBtn.classList.toggle("active",t==="one");
+  roundBtn.classList.toggle("active",t==="round");
+  returnBox.style.display=t==="round"?"block":"none";
+  addStop.style.display=t==="round"?"block":"none";
+  stops.innerHTML="";
+}
+
+function addStop(){
+  const i=document.createElement("input");
+  i.className="input";
+  i.placeholder="Stop Location";
+  new google.maps.places.Autocomplete(i);
+  stops.appendChild(i);
+}
+
+function useCurrentLocation(){
+  navigator.geolocation.getCurrentPosition(pos=>{
+    geocoder.geocode(
+      {location:{lat:pos.coords.latitude,lng:pos.coords.longitude}},
+      res=>pickup.value=res[0].formatted_address
+    );
+  });
+}
+
+/* 30 SECOND LOCK */
+function lockBtn(){
+  let sec=30;
+  submitBtn.disabled=true;
+  let t=setInterval(()=>{
+    submitBtn.innerText="Please wait ("+sec+"s)";
+    sec--;
+    if(sec<0){
+      clearInterval(t);
+      submitBtn.disabled=false;
+      submitBtn.innerText="Check Fare and Book Cab";
+      locked=false;
+    }
+  },1000);
+}
+
+function calculateKM(){
+  if(locked) return;
+  locked=true;
+  lockBtn();
+
+  if(!/^[6-9]\d{9}$/.test(mobile.value)){
+    alert("Invalid mobile number");
+    return;
+  }
+
+  let waypoints=[];
+  document.querySelectorAll("#stops input").forEach(s=>{
+    waypoints.push({location:s.value,stopover:true});
+  });
+
+  if(tripType==="round"){
+    waypoints.push({location:drop.value,stopover:true});
+  }
+
+  directionsService.route({
+    origin:pickup.value,
+    destination:tripType==="round"?pickup.value:drop.value,
+    waypoints:waypoints,
+    travelMode:"DRIVING"
+  },res=>{
+    let km=0;
+    res.routes[0].legs.forEach(l=>km+=l.distance.value);
+    km=Math.round(km/1000);
+
+    fetch("https://script.google.com/macros/s/AKfycbyb50XEKPuIY1BOMVsQwIlcPuwdyTFajmtXwl8zYyiQsPJKMEZ8epmJN6pOrA0l5yEU/exec",{
+      method:"POST",
+      body:JSON.stringify({
+        subject:"Searching For Cab",
+        pickup:pickup.value,
+        route:pickup.value+" to "+drop.value,
+        mobile:mobile.value,
+        datetime:date.value+" "+time.value,
+        returnDate:returnDate.value||"",
+        km:km
+      })
+    });
+  });
+}
+</script>
+
+</body>
+</html>
