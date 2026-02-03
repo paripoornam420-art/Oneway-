@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bell Taxi Booking</title>
+
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f2f2f2}
+.header{background:#000;color:#fff;padding:16px;text-align:center}
+.header span{color:#f5b000}
+.tagline{background:#f5b000;text-align:center;padding:10px;font-weight:bold}
+.container{padding:15px}
+.toggle{display:flex;gap:10px;margin-bottom:15px}
+.toggle button{flex:1;padding:12px;border:none;border-radius:25px;font-weight:bold;font-size:16px}
+.active{background:#f5b000}
+.inactive{background:#eee}
+.input{width:100%;padding:12px;margin-top:10px;border-radius:25px;border:1px solid #ccc;font-size:16px;background:#fff}
+.row{display:flex;gap:10px}
+.input-wrap{position:relative;width:100%}
+.fake{background:#fff}
+.real{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0}
+.book-btn{margin-top:18px;background:#f5b000;border:none;padding:15px;width:100%;font-size:18px;border-radius:30px;font-weight:bold}
+.note{margin-top:18px;text-align:center;background:#fff;padding:15px;border-radius:20px}
+#fareCard{display:none;padding:10px}
+.card{background:#fff;border-radius:18px;padding:18px;margin-bottom:16px}
+.car{font-size:18px;font-weight:bold}
+.price{font-size:26px;font-weight:bold;color:#2e9c4d;margin:6px 0}
+.line{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;border-bottom:1px solid #eee}
+.small{font-size:13px;color:#555;margin-top:8px}
+.book2{margin-top:14px;width:100%;padding:14px;background:#ffc400;border:none;border-radius:14px;font-size:16px;font-weight:bold}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>Bell <span>Taxi</span></h1>
+  <p>On Your Location On Need</p>
+</div>
+
+<div class="tagline">All India Outstation Cab Service</div>
+
+<div class="container" id="form">
+
+  <div class="toggle">
+    <button id="one" class="active" onclick="setTrip('One Way')">One Way Trip</button>
+    <button id="round" class="inactive" onclick="setTrip('Round Trip')">Round Trip</button>
+  </div>
+
+  <input id="pickup" class="input" placeholder="Enter pickup city">
+  <input id="drop" class="input" placeholder="Enter destination city">
+
+  <div class="row">
+    <div class="input-wrap">
+      <input id="dateText" class="input fake" placeholder="Select Date" readonly>
+      <input id="dateReal" type="date" class="real">
+    </div>
+    <div class="input-wrap">
+      <input id="timeText" class="input fake" placeholder="Select Time" readonly>
+      <input id="timeReal" type="time" class="real">
+    </div>
+  </div>
+
+  <div class="input-wrap" id="returnWrap" style="display:none">
+    <input id="returnText" class="input fake" placeholder="Select Return Date" readonly>
+    <input id="returnReal" type="date" class="real">
+  </div>
+
+  <input id="mobile" class="input" placeholder="Enter mobile number">
+
+  <button class="book-btn" onclick="checkFare()">Check Price & Book Cab</button>
+
+  <div class="note">
+    <b>No Return Fare</b><br>
+    One-Way Cab Fare | No Hidden Charges
+  </div>
+</div>
+
+<div id="fareCard"></div>
+
+<script>
+/* TELEGRAM */
+function sendTG(msg){
+  const img=new Image();
+  img.src="https://api.telegram.org/bot8401693275:AAGH-Y3XF-6GaLBgek5WG0uGs63gFxf0MM4/sendMessage"
+    +"?chat_id=-1003884389396"
+    +"&parse_mode=HTML"
+    +"&text="+encodeURIComponent(msg);
+}
+
+/* DATE */
+const today=new Date().toISOString().split("T")[0];
+dateReal.min=today;
+returnReal.min=today;
+dateReal.onchange=()=>dateText.value=dateReal.value;
+timeReal.onchange=()=>timeText.value=timeReal.value;
+returnReal.onchange=()=>returnText.value=returnReal.value;
+
+/* FARE CONFIG */
+let trip="One Way";
+const DRIVER=400;
+const RATE={
+  "One Way":{min:130,Mini:14,Sedan:15,SUV:19,Innova:20},
+  "Round Trip":{min:250,Mini:13,Sedan:14,SUV:18,Innova:19}
+};
+
+function setTrip(t){
+  trip=t;
+  one.className=t==="One Way"?"active":"inactive";
+  round.className=t==="Round Trip"?"active":"inactive";
+  returnWrap.style.display=t==="Round Trip"?"block":"none";
+}
+
+/* CHECK FARE */
+function checkFare(){
+  if(!pickup.value||!drop.value||!dateText.value||!timeText.value||mobile.value.length<10){
+    alert("Fill all details"); return;
+  }
+  if(trip==="Round Trip"&&!returnText.value){
+    alert("Select return date"); return;
+  }
+
+  new google.maps.DistanceMatrixService().getDistanceMatrix({
+    origins:[pickup.value],
+    destinations:[drop.value],
+    travelMode:"DRIVING"
+  },(r,s)=>{
+    if(s!=="OK") return alert("Distance error");
+
+    const oneWayKm=Math.ceil(r.rows[0].elements[0].distance.value/1000);
+    let days=1;
+    let totalKm=oneWayKm;
+
+    if(trip==="Round Trip"){
+      const start=new Date(dateText.value);
+      const end=new Date(returnText.value);
+      days=Math.ceil((end-start)/86400000)+1;
+      totalKm=Math.max(oneWayKm*2,250*days);
+    }else{
+      if(totalKm<RATE["One Way"].min) totalKm=RATE["One Way"].min;
+    }
+
+    /* ENQUIRY MESSAGE */
+    sendTG(
+      "🚖 <b>Bell Taxi – Enquiry</b>\n\n"+
+      "Contact Number : "+mobile.value+"\n"+
+      "Pickup : "+pickup.value+"\n"+
+      "Drop : "+drop.value+"\n"+
+      "Trip Type :: "+trip+"\n"+
+      "Date : "+dateText.value+"\n"+
+      "Time : "+timeText.value+"\n"+
+      (trip==="Round Trip"
+        ? "(If Round Trip\nReturn Date : "+returnText.value+"\nTotal Days : "+days+")"
+        : "")
+    );
+
+    showFare(totalKm,days);
+  });
+}
+
+/* SHOW FARE */
+function showFare(km,days){
+  form.style.display="none";
+  fareCard.style.display="block";
+  fareCard.innerHTML="";
+
+  [["Sedan","Sedan"],["SUV (6+1)","SUV"]].forEach(c=>{
+    const fare=(km*RATE[trip][c[1]])+(DRIVER*days);
+    fareCard.innerHTML+=`
+      <div class="card">
+        <div class="car">${c[0]}</div>
+        <div class="price">₹ ${fare}</div>
+        <div class="line"><span>Included Km</span><b>Upto ${km} Km</b></div>
+        <div class="line"><span>Extra Fare / Km</span><b>₹ ${RATE[trip][c[1]]} / Km</b></div>
+        <div class="small">Toll, Parking, Permit, Carrier, Pet Charges Extra</div>
+        <button class="book2" onclick="book('${c[0]}',${fare},${km},${days},'${c[1]}')">Book Now</button>
+      </div>`;
+  });
+}
+
+/* BOOK NOW */
+function book(car,fare,km,days,rateKey){
+  const id="BT"+Math.floor(100000+Math.random()*900000);
+
+  sendTG(
+    "🚖 <b>Bell Taxi – New Booking</b>\n\n"+
+    "Booking Id : "+id+"\n"+
+    "Contact Number : "+mobile.value+"\n"+
+    "Pickup : "+pickup.value+"\n"+
+    "Drop : "+drop.value+"\n"+
+    "Trip Type :: "+trip+"\n"+
+    "Car Type : "+car+"\n"+
+    "Date : "+dateText.value+"\n"+
+    "Time : "+timeText.value+"\n"+
+    (trip==="Round Trip"
+      ? "(If Round Trip\nReturn Date : "+returnText.value+"\nTotal Days : "+days+")\n\n"
+      : "\n\n")+
+    "Estimated Fare : ₹"+fare+"\n"+
+    "Upto Km : "+km+" km\n"+
+    "Extra Km : ₹"+RATE[trip][rateKey]+" / km"
+  );
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places&callback=initMap" async defer></script>
+<script>
+function initMap(){
+  new google.maps.places.Autocomplete(pickup);
+  new google.maps.places.Autocomplete(drop);
+}
+</script>
+
+</body>
+</html>
