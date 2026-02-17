@@ -104,24 +104,34 @@ font-weight:bold
 .real{position:absolute;inset:0;opacity:0}
 #returnWrap{display:none}
 
-/* MENU */
+/* MENU (LIKE SCREENSHOT) */
 #sideMenu{
 position:fixed;
 top:0;
-right:-260px;
-width:260px;
+right:-100%;
+width:80%;
 height:100%;
 background:#fff;
-box-shadow:-5px 0 15px rgba(0,0,0,.2);
-padding:20px;
-transition:all .4s ease;
+padding:30px 20px;
+transition:.3s ease;
 z-index:999;
+}
+#sideMenu h3{
+margin-top:0;
+font-size:22px;
+}
+#sideMenu a{
+display:block;
+font-size:20px;
+padding:14px 0;
+text-decoration:none;
+color:#000;
 }
 .overlay{
 position:fixed;
 top:0;left:0;
 width:100%;height:100%;
-background:rgba(0,0,0,.3);
+background:rgba(0,0,0,.4);
 display:none;
 z-index:998;
 }
@@ -136,17 +146,13 @@ z-index:998;
 </div>
 
 <div class="header-right">
-
 <a href="tel:08110000796" class="icon-btn call-btn">
 <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png">
 </a>
-
 <a href="https://wa.me/918110000796" class="icon-btn wa-btn">
 <img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png">
 </a>
-
 <div class="menu" onclick="openMenu()">☰</div>
-
 </div>
 </div>
 
@@ -163,9 +169,13 @@ Pay for One-Way Only – No Hidden Charges
 
 <div id="sideMenu">
 <h3>Menu</h3>
-<a href="index.html">Home</a><br>
-<a href="service-cities.html">Service Cities</a><br>
+<a href="index.html">Home</a>
+<a href="service-cities.html">Service Cities</a>
 <a href="about-us.html">About Us</a>
+<a href="privacy-policy.html">Privacy Policy</a>
+<a href="cancellation-policy.html">Cancellation Policy</a>
+<a href="Terms-and-conditiona.html">Terms & Conditions</a>
+<a href="Luggage-policy.html">Luggage Policy</a>
 </div>
 
 <div class="container">
@@ -201,23 +211,46 @@ Pay for One-Way Only – No Hidden Charges
 
 <input id="mobile" class="input" placeholder="Mobile Number">
 
+<!-- NAME BELOW MOBILE -->
+<input id="name" class="input" placeholder="Full Name">
+
 <button class="book-btn" onclick="checkFare()">Check Fare</button>
 
 </div>
 
 <script>
 
-/* TELEGRAM */
-const BOT_TOKEN="8502831495:AAGLFy6qRr-DBKDYJNM8gMPih77ikjUmn-A";
-const CHAT_ID="-1003748599908";
+let trip="One Way";
+let pickupMapLink="";
 
-function sendTelegram(message){
-fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({chat_id:CHAT_ID,text:message})
-});
+/* MENU */
+function openMenu(){
+document.getElementById("sideMenu").style.right="0";
+document.getElementById("overlay").style.display="block";
 }
+function closeMenu(){
+document.getElementById("sideMenu").style.right="-100%";
+document.getElementById("overlay").style.display="none";
+}
+
+/* TRIP */
+function setTrip(type){
+trip=type;
+document.getElementById("one").classList.remove("active");
+document.getElementById("round").classList.remove("active");
+if(type==="One Way"){
+document.getElementById("one").classList.add("active");
+document.getElementById("returnWrap").style.display="none";
+}else{
+document.getElementById("round").classList.add("active");
+document.getElementById("returnWrap").style.display="block";
+}
+}
+
+/* DATE DISPLAY */
+dateReal.onchange=()=>dateText.value=dateReal.value;
+timeReal.onchange=()=>timeText.value=timeReal.value;
+returnReal.onchange=()=>returnText.value=returnReal.value;
 
 /* GOOGLE INIT */
 function initMap(){
@@ -232,68 +265,32 @@ btn.innerText="📍 Detecting...";
 navigator.geolocation.getCurrentPosition(pos=>{
 const lat=pos.coords.latitude;
 const lng=pos.coords.longitude;
+pickupMapLink=`https://www.google.com/maps?q=${lat},${lng}`;
 const geocoder=new google.maps.Geocoder();
 geocoder.geocode({location:{lat,lng}},(res,status)=>{
 if(status==="OK"&&res[0]){
 pickup.value=res[0].formatted_address;
-}else{
-pickup.value=lat+","+lng;
 }
 btn.innerText="📍 Use My Current Location";
 });
-},()=>{
-btn.innerText="📍 Use My Current Location";
-alert("Location permission denied");
 });
 }
 
 /* CHECK FARE */
 function checkFare(){
-if(!pickup.value||!drop.value||!dateText.value||!timeText.value||!mobile.value){
+if(!pickup.value||!drop.value||!dateText.value||!timeText.value||!mobile.value||!name.value){
 alert("Fill all details");
 return;
 }
 
-const message=
-`🚕 Enquiry From Bell Taxi
-📞 Mobile: ${mobile.value}
-📍 Pickup: ${pickup.value}
-🏁 Drop: ${drop.value}
-📅 Date: ${dateText.value}
-⏰ Time: ${timeText.value}`;
-
-sendTelegram(message);
-window.location.href="fare.html";
-}
-
-/* TRIP */
-let trip="One Way";
-function setTrip(type){
-trip=type;
-document.getElementById("one").classList.remove("active");
-document.getElementById("round").classList.remove("active");
-if(type==="One Way"){
-document.getElementById("one").classList.add("active");
-document.getElementById("returnWrap").style.display="none";
-}else{
-document.getElementById("round").classList.add("active");
-document.getElementById("returnWrap").style.display="block";
-}
-}
-
-/* DATE TEXT */
-dateReal.onchange=()=>dateText.value=dateReal.value;
-timeReal.onchange=()=>timeText.value=timeReal.value;
-returnReal.onchange=()=>returnText.value=returnReal.value;
-
-/* MENU */
-function openMenu(){
-document.getElementById("sideMenu").style.right="0";
-document.getElementById("overlay").style.display="block";
-}
-function closeMenu(){
-document.getElementById("sideMenu").style.right="-260px";
-document.getElementById("overlay").style.display="none";
+window.location.href=
+`fare.html?
+name=${encodeURIComponent(name.value)}
+&mobile=${encodeURIComponent(mobile.value)}
+&pickup=${encodeURIComponent(pickup.value)}
+&drop=${encodeURIComponent(drop.value)}
+&trip=${trip}
+&map=${encodeURIComponent(pickupMapLink)}`;
 }
 
 </script>

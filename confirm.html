@@ -5,183 +5,245 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Booking Confirmed | Bell Taxi</title>
 
-<!-- FAVICON -->
 <link rel="icon" type="image/png"
-href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
-<link rel="apple-touch-icon"
 href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f2f2f2;
-}
+body{margin:0;font-family:Arial;background:#f2f2f2}
 
-/* TAP FEEDBACK */
-button:active{
-  transform:scale(0.97);
-  opacity:0.85;
-}
-
-/* HEADER (SAME AS HOME) */
+/* ===== HEADER (SAME AS INDEX) ===== */
 .header{
-  background:#fff;
-  padding:12px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  box-shadow:0 2px 6px rgba(0,0,0,.08)
+background:#fff;
+padding:12px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 6px rgba(0,0,0,.08)
 }
 .logo img{height:48px}
+.header-right{display:flex;gap:12px;align-items:center}
+.menu{font-size:28px;cursor:pointer}
 
-/* HEADER RIGHT */
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.menu{font-size:28px}
-
-/* ICON BUTTONS (HEADER ONLY) */
 .icon-btn{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+width:44px;height:44px;border-radius:50%;
+display:flex;align-items:center;justify-content:center
 }
 .icon-btn img{width:22px}
 .call-btn{background:#1e40ff}
 .wa-btn{background:#25D366}
 
-/* CONTAINER */
+/* ===== MENU ===== */
+#sideMenu{
+position:fixed;
+top:0;
+right:-100%;
+width:80%;
+height:100%;
+background:#fff;
+padding:30px 20px;
+transition:.3s ease;
+z-index:999;
+}
+#sideMenu a{
+display:block;
+font-size:20px;
+padding:14px 0;
+text-decoration:none;
+color:#000;
+}
+.overlay{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,.4);
+display:none;
+z-index:998;
+}
+
+/* ===== MARQUEE ===== */
+.marquee{
+background:#ffc400;
+padding:6px 0;
+overflow:hidden;
+white-space:nowrap;
+font-weight:bold;
+}
+.marquee span{
+display:inline-block;
+padding-left:100%;
+animation:scroll 18s linear infinite;
+}
+@keyframes scroll{
+0%{transform:translateX(0)}
+100%{transform:translateX(-100%)}
+}
+
+/* ===== CONTENT ===== */
 .container{
-  max-width:480px;
-  margin:24px auto;
-  padding:16px;
+padding:20px;
+max-width:500px;
+margin:auto;
 }
 
-/* CARD */
 .card{
-  background:#fff;
-  border-radius:40px;
-  padding:24px;
-  text-align:center;
+background:#fff;
+border-radius:25px;
+padding:25px;
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
+text-align:center;
 }
 
-/* SUCCESS ICON */
-.tick{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  background:#2e9c4d;
-  color:#fff;
-  font-size:44px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 14px;
+.success-icon{
+width:100px;
+height:100px;
+border-radius:50%;
+background:#2e9c4d;
+margin:0 auto 20px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:55px;
+color:#fff;
+animation:pop .5s ease;
+}
+@keyframes pop{
+0%{transform:scale(0)}
+100%{transform:scale(1)}
 }
 
-/* TEXT */
-h2{margin:10px 0;color:#2e9c4d}
-p{color:#555;font-size:15px}
-.id{
-  margin:14px 0;
-  padding:12px;
-  background:#f5f5f5;
-  border-radius:20px;
-  font-weight:bold;
-  font-size:16px;
+.title{
+font-size:22px;
+color:#2e9c4d;
+font-weight:bold;
+margin-bottom:15px;
 }
 
-/* INFO */
-.info{
-  text-align:left;
-  margin-top:16px;
-}
-.line{
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px solid #eee;
-  font-size:14px;
+.details{
+text-align:left;
+font-size:15px;
+line-height:24px;
+margin-top:10px;
 }
 
-/* BUTTONS */
-.btn{
-  margin-top:18px;
-  display:block;
-  width:100%;
-  padding:16px;
-  border-radius:40px;
-  border:none;
-  font-size:16px;
-  font-weight:bold;
+.highlight{
+color:#2e9c4d;
+font-weight:bold;
 }
-.call{background:#2e9c4d;color:#fff}
-.home{background:#f5b000}
+
+.home-btn{
+margin-top:20px;
+background:#f5b000;
+border:none;
+padding:14px;
+width:100%;
+font-size:16px;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER (UNCHANGED, SAME AS HOME) -->
+<!-- ===== HEADER ===== -->
 <div class="header">
-  <div class="logo">
-    <img src="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
-  </div>
-
-  <div class="header-right">
-    <a href="tel:08110000796" class="icon-btn call-btn">
-      <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png">
-    </a>
-    <a href="https://wa.me/918110000796" class="icon-btn wa-btn">
-      <img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png">
-    </a>
-    <div class="menu">☰</div>
-  </div>
+<div class="logo">
+<img src="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
 </div>
 
-<!-- CONFIRM CARD (NO ICONS BELOW HEADER) -->
+<div class="header-right">
+
+<a href="tel:08110000796" class="icon-btn call-btn">
+<img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png">
+</a>
+
+<a href="https://wa.me/918110000796" class="icon-btn wa-btn">
+<img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png">
+</a>
+
+<div class="menu" onclick="openMenu()">☰</div>
+
+</div>
+</div>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee">
+<span>
+Bell Taxi – Safe, Reliable & Affordable Taxi Services |
+One-Way Taxi | Outstation Cabs | 24×7 Customer Support |
+Pay for One-Way Only – No Hidden Charges
+</span>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<div id="sideMenu">
+<a href="index.html">Home</a>
+<a href="service-cities.html">Service Cities</a>
+<a href="about-us.html">About Us</a>
+<a href="privacy-policy.html">Privacy Policy</a>
+<a href="cancellation-policy.html">Cancellation Policy</a>
+</div>
+
+<!-- ===== SUCCESS CARD ===== -->
 <div class="container">
-  <div class="card">
+<div class="card">
 
-    <div class="tick">✓</div>
+<div class="success-icon">✓</div>
 
-    <h2>Booking Confirmed</h2>
-    <p>Your cab booking has been successfully received.</p>
+<div class="title">Booking Confirmed Successfully!</div>
 
-    <div class="id" id="bookingId">Booking ID :</div>
+<div id="details" class="details"></div>
 
-    <div class="info">
-      <div class="line"><span>Status</span><b>Confirmed</b></div>
-      <div class="line"><span>Driver</span><b>Assigned Soon</b></div>
-      <div class="line"><span>Support</span><b>24 × 7 Available</b></div>
-    </div>
+<button class="home-btn" onclick="goHome()">Back to Home</button>
 
-    <button class="btn call" onclick="callNow()">📞 Call Now</button>
-    <button class="btn home" onclick="goHome()">🏠 Book Another Cab</button>
-
-  </div>
+</div>
 </div>
 
 <script>
-/* READ BOOKING ID */
-const params=new URLSearchParams(window.location.search);
-const id=params.get("id") || "BTXXXXXX";
-document.getElementById("bookingId").innerText="Booking ID : "+id;
 
-/* ACTIONS */
-function callNow(){
-  window.location.href="tel:08110000796";
+/* GET URL DATA */
+const params=new URLSearchParams(window.location.search);
+
+const id=params.get("id")||"N/A";
+const name=params.get("name")||"Not Provided";
+const mobile=params.get("mobile")||"Not Provided";
+const pickup=params.get("pickup")||"Not Provided";
+const drop=params.get("drop")||"Not Provided";
+const car=params.get("car")||"Not Selected";
+const fare=params.get("fare")||"0";
+const paid=params.get("paid")||"0";
+const balance=params.get("balance")||"0";
+
+/* DISPLAY DETAILS */
+document.getElementById("details").innerHTML=`
+<b>🆔 Booking ID:</b> ${id}<br>
+<b>👤 Name:</b> ${name}<br>
+<b>📞 Contact:</b> ${mobile}<br>
+<b>📍 Pickup:</b> ${pickup}<br>
+<b>🏁 Drop:</b> ${drop}<br>
+<b>🚗 Car:</b> ${car}<br>
+<b>💰 Total Fare:</b> ₹${fare}<br>
+<b class="highlight">💳 Paid Now:</b> ₹${paid}<br>
+<b class="highlight">💼 Balance on Trip:</b> ₹${balance}
+`;
+
+/* MENU */
+function openMenu(){
+document.getElementById("sideMenu").style.right="0";
+document.getElementById("overlay").style.display="block";
 }
+function closeMenu(){
+document.getElementById("sideMenu").style.right="-100%";
+document.getElementById("overlay").style.display="none";
+}
+
 function goHome(){
-  window.location.href="index.html";
+window.location.href="index.html";
 }
+
 </script>
 
 </body>
