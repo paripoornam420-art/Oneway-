@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed | Bell Taxi</title>
+
+<link rel="icon" type="image/png"
+href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f2f2f2;overflow-x:hidden}
+
+/* HEADER */
+.header{
+background:#fff;
+padding:12px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 6px rgba(0,0,0,.08)
+}
+.logo img{height:48px}
+.menu{font-size:28px;cursor:pointer}
+
+/* MENU */
+#sideMenu{
+position:fixed;
+top:0;
+right:-100%;
+width:80%;
+height:100%;
+background:#fff;
+padding:30px 20px;
+transition:.3s ease;
+z-index:999;
+}
+#sideMenu a{
+display:block;
+font-size:20px;
+padding:14px 0;
+text-decoration:none;
+color:#000;
+border-bottom:1px solid #eee;
+}
+.overlay{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,.4);
+display:none;
+z-index:998;
+}
+
+/* CONTENT */
+.container{
+padding:20px;
+max-width:480px;
+margin:auto;
+text-align:center;
+animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.title{
+font-size:26px;
+font-weight:bold;
+color:#1e4db7;
+margin-top:15px;
+}
+
+.card{
+background:#fff;
+border-radius:25px;
+padding:20px;
+margin-top:20px;
+box-shadow:0 6px 18px rgba(0,0,0,.08);
+text-align:left;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+margin-bottom:12px;
+font-size:15px;
+}
+
+.label{color:#555}
+.value{font-weight:bold}
+
+.total{font-size:18px;font-weight:bold;color:#000}
+.paid{color:#2e9c4d;font-weight:bold}
+.balance{color:#e53935;font-weight:bold}
+
+.note{
+font-size:13px;
+color:#777;
+margin-top:6px;
+}
+
+.btn{
+margin-top:15px;
+padding:15px;
+border-radius:40px;
+font-size:16px;
+font-weight:bold;
+border:none;
+width:100%;
+cursor:pointer;
+}
+
+.whatsapp{background:#25D366;color:#fff}
+.driver{background:#128C7E;color:#fff}
+.call{background:#ff6b00;color:#fff}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+<div class="logo">
+<img src="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
+</div>
+<div class="menu" onclick="openMenu()">☰</div>
+</div>
+
+<!-- MENU -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<div id="sideMenu">
+<h3>Menu</h3>
+<a href="index.html">Home</a>
+<a href="service-cities.html">Service Cities</a>
+<a href="about-us.html">About Us</a>
+<a href="privacy-policy.html">Privacy Policy</a>
+</div>
+
+<div class="container">
+
+<div style="font-size:60px;">🎉</div>
+
+<div class="title">
+Booking Confirmed <br>
+Driver Assigned Soon 🚗
+</div>
+
+<div class="card">
+
+<div class="row">
+<span class="label">Booking ID</span>
+<span class="value" id="bid"></span>
+</div>
+
+<div class="row">
+<span class="label">Name</span>
+<span class="value" id="name"></span>
+</div>
+
+<div class="row">
+<span class="label">Contact</span>
+<span class="value" id="mobile"></span>
+</div>
+
+<div class="row">
+<span class="label">Pickup</span>
+<span class="value" id="pickup"></span>
+</div>
+
+<div class="row">
+<span class="label">Drop</span>
+<span class="value" id="drop"></span>
+</div>
+
+<div class="row">
+<span class="label">Car</span>
+<span class="value" id="car"></span>
+</div>
+
+<div class="row total">
+<span>Total Fare</span>
+<span id="fare"></span>
+</div>
+
+<div class="row paid">
+<span>Advance Paid</span>
+<span id="advance"></span>
+</div>
+
+<div class="row balance">
+<span>Balance on Trip</span>
+<span id="balance"></span>
+</div>
+
+<div class="note">
+Minimum 130 KM applicable for One Way trips.
+</div>
+
+<div class="note">
+Payment Status: <span id="paymentStatus"></span>
+</div>
+
+</div>
+
+<button class="btn whatsapp" onclick="shareWhatsApp()">
+📍 Share Booking on WhatsApp
+</button>
+
+<button class="btn driver" onclick="shareDriver()">
+🚗 Send Booking to Driver
+</button>
+
+<button class="btn call" onclick="callSupport()">
+📞 Call Support – 8110000796
+</button>
+
+</div>
+
+<script>
+
+/* CONFETTI */
+window.onload=function(){
+confetti({
+particleCount:150,
+spread:100,
+origin:{y:0.6}
+});
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* MENU */
+function openMenu(){
+sideMenu.style.right="0";
+overlay.style.display="block";
+}
+function closeMenu(){
+sideMenu.style.right="-100%";
+overlay.style.display="none";
+}
+
+/* GET DATA */
+const params=new URLSearchParams(window.location.search);
+
+const bookingID=params.get("id")||"N/A";
+const name=params.get("name")||"Not Provided";
+const mobile=params.get("mobile")||"Not Provided";
+const pickup=params.get("pickup")||"Not Provided";
+const drop=params.get("drop")||"Not Provided";
+const car=params.get("car")||"Not Selected";
+const totalFare=parseInt(params.get("fare"))||0;
+const advancePaid=parseInt(params.get("advance"))||500;
+
+const balance=totalFare-advancePaid;
+
+/* SET VALUES */
+bid.innerText=bookingID;
+document.getElementById("name").innerText=name;
+document.getElementById("mobile").innerText=mobile;
+document.getElementById("pickup").innerText=pickup;
+document.getElementById("drop").innerText=drop;
+document.getElementById("car").innerText=car;
+document.getElementById("fare").innerText="₹"+totalFare;
+document.getElementById("advance").innerText="₹"+advancePaid;
+document.getElementById("balance").innerText="₹"+balance;
+document.getElementById("paymentStatus").innerText=
+advancePaid>0?"Advance Paid ✅":"Pending";
+
+/* WHATSAPP SHARE */
+function shareWhatsApp(){
+const msg=
+`🚕 Bell Taxi Booking Confirmed
+
+🆔 ${bookingID}
+👤 ${name}
+📞 ${mobile}
+📍 ${pickup}
+🏁 ${drop}
+🚗 ${car}
+💰 Total: ₹${totalFare}
+💵 Advance: ₹${advancePaid}
+🧾 Balance: ₹${balance}`;
+
+window.open("https://wa.me/?text="+encodeURIComponent(msg));
+}
+
+/* DRIVER SHARE */
+function shareDriver(){
+const driverNumber="919999999999"; // Replace with real driver
+const msg=
+`New Trip Assigned 🚗
+
+Booking ID: ${bookingID}
+Pickup: ${pickup}
+Drop: ${drop}
+Customer: ${name}
+Mobile: ${mobile}`;
+
+window.open(`https://wa.me/${driverNumber}?text=${encodeURIComponent(msg)}`);
+}
+
+/* CALL */
+function callSupport(){
+window.location.href="tel:8110000796";
+}
+
+</script>
+
+</body>
+</html>
