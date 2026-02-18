@@ -187,6 +187,24 @@ font-weight:bold
 
 <script>
 
+/* TELEGRAM CONFIG */
+const BOT_TOKEN = "8335405675:AAE4Ag40b777r_mJEPgElL5z3HOm2Ff0crM";
+const CHAT_ID = "-1003520333892";
+
+/* SEND TELEGRAM */
+function sendTelegram(message){
+fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+chat_id: CHAT_ID,
+text: message
+})
+}).catch(err=>{
+console.log("Telegram Error:", err);
+});
+}
+
 /* MENU */
 function openMenu(){
 document.getElementById("sideMenu").style.right="0";
@@ -198,16 +216,9 @@ document.getElementById("overlay").style.display="none";
 }
 
 /* GOOGLE INIT */
-let autocompletePickup;
-let autocompleteDrop;
-
 window.initMap = function(){
-autocompletePickup = new google.maps.places.Autocomplete(
-document.getElementById("pickup")
-);
-autocompleteDrop = new google.maps.places.Autocomplete(
-document.getElementById("drop")
-);
+new google.maps.places.Autocomplete(document.getElementById("pickup"));
+new google.maps.places.Autocomplete(document.getElementById("drop"));
 }
 
 /* CURRENT LOCATION */
@@ -222,7 +233,7 @@ const lng=pos.coords.longitude;
 const geocoder=new google.maps.Geocoder();
 geocoder.geocode({location:{lat,lng}},(results,status)=>{
 if(status==="OK" && results[0]){
-pickup.value=results[0].formatted_address;
+document.getElementById("pickup").value = results[0].formatted_address;
 }else{
 alert("Unable to detect address");
 }
@@ -239,22 +250,31 @@ btn.innerText="📍 Use My Current Location";
 let trip="oneway";
 function setTrip(type){
 trip=type;
-one.classList.remove("active");
-round.classList.remove("active");
+document.getElementById("one").classList.remove("active");
+document.getElementById("round").classList.remove("active");
 
 if(type==="oneway"){
-one.classList.add("active");
-returnWrap.style.display="none";
+document.getElementById("one").classList.add("active");
+document.getElementById("returnWrap").style.display="none";
 }else{
-round.classList.add("active");
-returnWrap.style.display="block";
+document.getElementById("round").classList.add("active");
+document.getElementById("returnWrap").style.display="block";
 }
 }
 
 /* DATE */
-dateReal.onchange=()=>dateText.value=dateReal.value;
-timeReal.onchange=()=>timeText.value=timeReal.value;
-returnReal.onchange=()=>returnText.value=returnReal.value;
+document.getElementById("dateReal").onchange=()=>{
+document.getElementById("dateText").value=
+document.getElementById("dateReal").value;
+};
+document.getElementById("timeReal").onchange=()=>{
+document.getElementById("timeText").value=
+document.getElementById("timeReal").value;
+};
+document.getElementById("returnReal").onchange=()=>{
+document.getElementById("returnText").value=
+document.getElementById("returnReal").value;
+};
 
 /* VALIDATE */
 function validate(){
@@ -270,18 +290,36 @@ return true;
 
 /* CHECK FARE */
 function checkFare(){
+
 if(!validate()){
 alert("Fill all details");
 return;
 }
 
-window.location.href=
-`fare.html?
-name=${encodeURIComponent(name.value)}
+/* TELEGRAM MESSAGE */
+const message=
+`🚕 Enquiry From Bell Taxi
+
+👤 Name: ${name.value}
+📞 Mobile: ${mobile.value}
+📍 Pickup: ${pickup.value}
+🏁 Drop: ${drop.value}
+📅 Date: ${dateText.value}
+⏰ Time: ${timeText.value}
+🧭 Trip: ${trip}`;
+
+sendTelegram(message);
+
+/* SMALL DELAY THEN REDIRECT */
+setTimeout(()=>{
+window.location.href =
+`fare.html?name=${encodeURIComponent(name.value)}
 &mobile=${encodeURIComponent(mobile.value)}
 &pickup=${encodeURIComponent(pickup.value)}
 &drop=${encodeURIComponent(drop.value)}
 &trip=${trip}`;
+},800);
+
 }
 
 </script>
