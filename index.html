@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Droptaxi Tamilnadu | Premium Intercity Taxi</title>
+
+<link rel="icon" href="https://raw.githubusercontent.com/droptaxitamilnadu/dtoptaxi/refs/heads/main/droptaxi-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  background:linear-gradient(135deg,#0D47A1,#1565C0);
+  min-height:100vh;
+}
+
+/* HEADER */
+header{
+  background:#fff;
+  padding:12px 15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+.logo img{
+  height:60px;
+  animation:logoPulse 2s infinite alternate;
+}
+
+@keyframes logoPulse{
+  from{transform:scale(1);}
+  to{transform:scale(1.1);}
+}
+
+.header-icons{
+  display:flex;
+  gap:18px;
+}
+
+.header-icons a{
+  font-size:28px;
+  text-decoration:none;
+  animation:iconBlink 1.5s infinite;
+}
+
+.call{color:#1E4FAF;}
+.whatsapp{color:#25D366;}
+
+@keyframes iconBlink{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.25);}
+}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:30px 20px;
+  color:#fff;
+}
+
+.hero h1{
+  font-size:24px;
+  font-weight:800;
+}
+
+/* CARD */
+.booking-card{
+  background:#fff;
+  margin:0 15px 40px;
+  padding:25px;
+  border-radius:22px;
+}
+
+.toggle{
+  display:flex;
+  background:#f1f1f1;
+  border-radius:40px;
+  margin-bottom:20px;
+}
+
+.toggle button{
+  flex:1;
+  padding:12px;
+  border:none;
+  font-weight:700;
+  background:transparent;
+  cursor:pointer;
+}
+
+.toggle .active{
+  background:#1E4FAF;
+  color:#fff;
+}
+
+.field{margin-bottom:15px;}
+
+.field label{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:5px;
+  display:block;
+}
+
+.field input{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  background:#f4f6f9;
+  font-size:15px;
+}
+
+.row{
+  display:flex;
+  gap:12px;
+}
+
+.row .field{flex:1;}
+
+.book-btn{
+  background:#FF6F00;
+  color:#fff;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.book-btn:hover{transform:scale(1.05);}
+.book-btn:disabled{opacity:0.6;}
+
+.spinner{
+  width:18px;height:18px;
+  border:3px solid #fff;
+  border-top:3px solid transparent;
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+  display:inline-block;
+  margin-left:8px;
+}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="https://raw.githubusercontent.com/droptaxitamilnadu/dtoptaxi/refs/heads/main/droptaxi-logo.png">
+  </div>
+  <div class="header-icons">
+    <a href="tel:+918062178752" class="call">📞</a>
+    <a href="https://wa.me/91+918062178752" class="whatsapp">💬</a>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Premium Intercity Taxi Service</h1>
+</div>
+
+<div class="booking-card">
+
+  <div class="toggle">
+    <button id="onewayBtn" class="active">One Way</button>
+    <button id="roundBtn">Round Trip</button>
+  </div>
+
+  <div class="field">
+    <label>Pickup Location</label>
+    <input type="text" id="pickup">
+  </div>
+
+  <div class="field">
+    <label>Drop Location</label>
+    <input type="text" id="drop">
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label>Pickup Date</label>
+      <input type="date" id="pickupDate">
+    </div>
+    <div class="field">
+      <label>Pickup Time</label>
+      <input type="time" id="pickupTime">
+    </div>
+  </div>
+
+  <div class="field" id="returnField" style="display:none;">
+    <label>Return Date</label>
+    <input type="date" id="returnDate">
+  </div>
+
+  <div class="field">
+    <label>Full Name</label>
+    <input type="text" id="name">
+  </div>
+
+  <div class="field">
+    <label>Mobile Number</label>
+    <input type="tel" id="mobile">
+  </div>
+
+  <button class="book-btn" id="checkBtn" onclick="checkFare()">CHECK FARE</button>
+
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXnBk1mKSeIF5_UNsLejhqUYFIbJqMXZk&libraries=places"></script>
+
+<script>
+let tripType="oneway";
+
+const pickupInput=document.getElementById("pickup");
+const dropInput=document.getElementById("drop");
+const returnField=document.getElementById("returnField");
+const onewayBtn=document.getElementById("onewayBtn");
+const roundBtn=document.getElementById("roundBtn");
+const btn=document.getElementById("checkBtn");
+
+/* TOGGLE */
+onewayBtn.onclick=()=>{
+  tripType="oneway";
+  onewayBtn.classList.add("active");
+  roundBtn.classList.remove("active");
+  returnField.style.display="none";
+};
+
+roundBtn.onclick=()=>{
+  tripType="roundtrip";
+  roundBtn.classList.add("active");
+  onewayBtn.classList.remove("active");
+  returnField.style.display="block";
+};
+
+/* AUTOCOMPLETE */
+new google.maps.places.Autocomplete(pickupInput,{componentRestrictions:{country:"in"}});
+new google.maps.places.Autocomplete(dropInput,{componentRestrictions:{country:"in"}});
+
+/* BOOKING ID DT-MM001 */
+function generateBookingID(){
+  const month=String(new Date().getMonth()+1).padStart(2,'0');
+  let count=localStorage.getItem("bookingCounter")||0;
+  count=parseInt(count)+1;
+  localStorage.setItem("bookingCounter",count);
+  return `DT-${month}${String(count).padStart(3,'0')}`;
+}
+
+/* MAIN FUNCTION */
+async function checkFare(){
+
+  const pickupVal=pickupInput.value.trim();
+  const dropVal=dropInput.value.trim();
+  const nameVal=document.getElementById("name").value.trim();
+  const mobileVal=document.getElementById("mobile").value.trim();
+  const dateVal=document.getElementById("pickupDate").value;
+  const timeVal=document.getElementById("pickupTime").value;
+
+  if(!pickupVal||!dropVal||!nameVal||!mobileVal||!dateVal||!timeVal){
+    alert("Please fill all fields");
+    return;
+  }
+
+  btn.disabled=true;
+  btn.innerHTML="Processing <span class='spinner'></span>";
+
+  /* ================= IP + VPN CHECK ================= */
+  let userIP="Unknown";
+  let isVPN=false;
+  let country="";
+
+  try{
+    const res=await fetch("https://ipapi.co/json/");
+    const data=await res.json();
+    userIP=data.ip;
+    country=data.country_name;
+
+    if(data.org && (
+      data.org.toLowerCase().includes("vpn") ||
+      data.org.toLowerCase().includes("hosting") ||
+      data.org.toLowerCase().includes("amazon") ||
+      data.org.toLowerCase().includes("google") ||
+      data.org.toLowerCase().includes("digitalocean")
+    )){
+      isVPN=true;
+    }
+
+  }catch(e){}
+
+  /* ================= FRAUD SCORING ================= */
+
+  let fraudScore=0;
+  let blacklist=JSON.parse(localStorage.getItem("ipBlacklist"))||[];
+
+  if(!/^[6-9]\d{9}$/.test(mobileVal)) fraudScore+=30;
+  if(pickupVal.toLowerCase()===dropVal.toLowerCase()) fraudScore+=50;
+  if(isVPN) fraudScore+=40;
+  if(blacklist.includes(userIP)) fraudScore+=100;
+
+  const lastAttempt=localStorage.getItem("lastAttempt");
+  const now=Date.now();
+  if(lastAttempt && now-lastAttempt<20000) fraudScore+=60;
+  localStorage.setItem("lastAttempt",now);
+
+  /* ================= DISTANCE ================= */
+
+  const service=new google.maps.DistanceMatrixService();
+
+  service.getDistanceMatrix({
+    origins:[pickupVal],
+    destinations:[dropVal],
+    travelMode:"DRIVING",
+    unitSystem:google.maps.UnitSystem.METRIC
+  },function(response,status){
+
+    if(status!=="OK"){
+      alert("Distance calculation failed");
+      btn.disabled=false;
+      btn.innerHTML="CHECK FARE";
+      return;
+    }
+
+    const km=response.rows[0].elements[0].distance.value/1000;
+
+    if(km<3) fraudScore+=40;
+
+    /* AUTO BLACKLIST HIGH RISK */
+    if(fraudScore>=120 && !blacklist.includes(userIP)){
+      blacklist.push(userIP);
+      localStorage.setItem("ipBlacklist",JSON.stringify(blacklist));
+    }
+
+    let risk="🟢 SAFE";
+    if(fraudScore>=120) risk="🔴 BLOCKED";
+    else if(fraudScore>=60) risk="🟡 SUSPICIOUS";
+
+    const bookingID=generateBookingID();
+
+    const message=
+`🚕 Enquiry
+🆔 ${bookingID}
+👤 Name: ${nameVal}
+📞 Mobile: ${mobileVal}
+📍 Pickup: ${pickupVal}
+🏁 Drop: ${dropVal}
+🛣 Distance: ${km.toFixed(1)} KM
+📅 Date: ${dateVal}
+⏰ Time: ${timeVal}
+
+🧠 Fraud Score: ${fraudScore}
+🚦 Risk: ${risk}
+🌍 IP: ${userIP}
+🌎 Country: ${country}
+🔐 VPN: ${isVPN}`;
+
+    fetch("https://api.telegram.org/bot8502831495:AAGLFy6qRr-DBKDYJNM8gMPih77ikjUmn-A/sendMessage",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        chat_id:"-1003748599908",
+        text:message
+      })
+    });
+
+    if(fraudScore>=120){
+      alert("High risk booking blocked.");
+      btn.disabled=false;
+      btn.innerHTML="CHECK FARE";
+      return;
+    }
+
+    localStorage.setItem("bookingData",JSON.stringify({
+      bookingID,
+      pickup:pickupVal,
+      drop:dropVal,
+      tripType,
+      pickupDate:dateVal,
+      pickupTime:timeVal,
+      returnDate:document.getElementById("returnDate").value,
+      name:nameVal,
+      mobile:mobileVal,
+      km:km.toFixed(2)
+    }));
+
+    setTimeout(()=>{
+      window.location="fare.html";
+    },1000);
+
+  });
+}
+</script>
+
+</body>
+</html>
