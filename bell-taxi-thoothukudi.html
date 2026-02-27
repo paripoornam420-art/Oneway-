@@ -1,219 +1,284 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Bell Taxi Thoothukudi | Oneway Taxi, Drop Taxi, Outstation & Round Trip</title>
+<title>Bell Taxi Thoothukudi | Oneway & Drop Taxi Service</title>
 
-<meta name="description"
-content="Book Bell Taxi Thoothukudi for Oneway Taxi, Drop Taxi, Droptaxi, Outstation Taxi and Round Trip Taxi services. Affordable taxi from Thoothukudi to Madurai, Chennai, Coimbatore, Trichy and Airport transfers. 24x7 Service.">
+<meta name="description" content="Bell Taxi Thoothukudi offers Oneway Taxi, Drop Taxi, Outstation Cabs and Round Trip taxi service from Thoothukudi to all major cities in Tamil Nadu. Transparent pricing and 24x7 support.">
 
-<link rel="icon"
-href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
-
-<!-- ===== SCHEMA MARKUP ===== -->
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"TaxiService",
-"name":"Bell Taxi Thoothukudi",
-"url":"https://yourdomain.com/thoothukudi-taxi.html",
-"telephone":"+918110000796",
-"areaServed":"Thoothukudi, Tamil Nadu",
-"priceRange":"₹₹",
-"address":{
-"@type":"PostalAddress",
-"addressLocality":"Thoothukudi",
-"addressRegion":"Tamil Nadu",
-"addressCountry":"IN"
-},
-"serviceOffered":{
-"@type":"Service",
-"name":"Oneway Taxi, Drop Taxi, Droptaxi, Outstation Taxi & Round Trip Taxi"
-}
-}
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f6fa;color:#222;line-height:1.7}
-.header{background:#fff;padding:14px 18px;
-display:flex;justify-content:space-between;align-items:center;
-box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.logo img{height:48px}
-
-.hero{
-background:linear-gradient(135deg,#FFD000,#ffb300);
-padding:70px 20px;text-align:center}
-.hero h1{margin:0;font-size:30px}
-.hero p{font-size:17px;margin-top:10px}
-
-.section{max-width:1100px;margin:40px auto;padding:0 20px}
-
-.route-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:25px;margin-top:30px}
-
-.route-card{
-background:#fff;padding:25px;border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-transition:.3s}
-.route-card:hover{transform:translateY(-5px)}
-
-.route-card h3{margin-top:0}
-
-.book-btn{
-margin-top:15px;
-display:inline-block;
-background:#111827;
-color:#fff;
-padding:10px 18px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
+:root{
+--yellow:#FFD000;
+--dark:#0f172a;
+--green:#1f7a3a;
+--muted:#666;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:'Poppins',sans-serif;
+background:#f4f6f9;
+color:#111;
 }
 
+/* HEADER */
+header{
+position:sticky;
+top:0;
+z-index:100;
+background:#fff;
+box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+.header-inner{
+max-width:1100px;
+margin:auto;
+padding:12px 16px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+.logo img{height:46px}
+.call-btn{
+background:var(--yellow);
+padding:8px 14px;
+border-radius:20px;
+font-weight:700;
+text-decoration:none;
+color:#000;
+}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,var(--yellow),#ffb300);
+padding:25px 16px;
+text-align:center;
+font-weight:800;
+font-size:20px;
+}
+
+/* INTRO */
+.intro{
+background:#fff;
+margin:18px;
+padding:20px;
+border-radius:16px;
+box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+.intro h1{
+font-size:22px;
+margin-bottom:8px;
+}
+.intro p{
+font-size:14px;
+color:#333;
+}
+
+/* ROUTES */
+.routes{
+margin:18px;
+}
+.routes h2{
+font-size:20px;
+margin-bottom:8px;
+}
+.route-card{
+background:#fff;
+padding:16px;
+border-radius:18px;
+margin-bottom:10px;
+box-shadow:0 5px 15px rgba(0,0,0,.05);
+display:flex;
+gap:12px;
+align-items:center;
+}
+.route-icon{
+width:34px;height:34px;
+border-radius:50%;
+background:var(--yellow);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:16px;
+}
+.route-title{
+font-weight:700;
+font-size:15px;
+}
+.route-sub{
+font-size:13px;
+color:var(--muted);
+}
+
+/* FOOTER */
 footer{
-background:#111827;color:#fff;
-padding:50px 20px 25px;text-align:center;margin-top:60px}
+background:linear-gradient(135deg,#0f172a,#111827);
+color:#fff;
+padding:30px 16px;
+margin-top:30px;
+font-size:14px;
+}
+footer a{color:#FFD000;text-decoration:none}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
+<header>
+<div class="header-inner">
 <div class="logo">
-<a href="index.html">
-<img src="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
-</a>
+<img src="logo.png" alt="Bell Taxi Logo">
 </div>
+<a href="tel:8110000796" class="call-btn">📞 8110000796</a>
 </div>
+</header>
 
-<!-- HERO -->
 <div class="hero">
-<h1>Bell Taxi Thoothukudi</h1>
-<p>Oneway Taxi • Drop Taxi • Droptaxi • Outstation Taxi • Round Trip Taxi</p>
+Bell Taxi Thoothukudi – Oneway & Drop Taxi
 </div>
 
-<!-- SEO CONTENT -->
-<div class="section">
-
-<h2>Best Oneway Taxi in Thoothukudi</h2>
-
+<div class="intro">
+<h1>Oneway Taxi & Drop Taxi in Thoothukudi</h1>
 <p>
-Looking for the most trusted <strong>Oneway Taxi in Thoothukudi</strong>? 
-Bell Taxi Thoothukudi provides professional and affordable taxi services for local and outstation travel. 
-If you are searching in Google for “best drop taxi near me”, “cheap oneway taxi Thoothukudi”, 
-“Thoothukudi to Madurai taxi fare”, “outstation taxi Thoothukudi”, or 
-“round trip taxi in Thoothukudi”, you are at the right place.
+Bell Taxi provides reliable <strong>Oneway Taxi, Drop Taxi, Outstation Cabs and Round Trip Taxi</strong> 
+services from Thoothukudi (Tuticorin) to all major cities in Tamil Nadu. 
+Book safe, affordable and professional taxi services with transparent per km pricing.
 </p>
-
-<p>
-Our <strong>Drop Taxi Thoothukudi</strong> service is ideal for customers who want to pay only for one side distance. 
-With transparent pricing, experienced drivers and well-maintained vehicles, 
-Bell Taxi has become one of the most searched and trusted <strong>Droptaxi services in Thoothukudi</strong>.
-</p>
-
-<h2>Drop Taxi & Droptaxi Services in Thoothukudi</h2>
-
-<p>
-Bell Taxi specializes in <strong>Drop Taxi services from Thoothukudi</strong> to all major cities in Tamil Nadu. 
-Customers frequently search for:
-</p>
-
-<ul>
-<li>Thoothukudi to Madurai Drop Taxi</li>
-<li>Thoothukudi to Chennai Oneway Taxi</li>
-<li>Thoothukudi to Coimbatore Outstation Taxi</li>
-<li>Thoothukudi to Trichy Taxi Fare</li>
-<li>Thoothukudi to Madurai Airport Taxi</li>
-<li>Best Droptaxi in Thoothukudi</li>
-<li>Low cost Outstation Taxi Thoothukudi</li>
-<li>Round Trip Taxi from Thoothukudi</li>
-</ul>
-
-<p>
-Our <strong>Outstation Taxi Thoothukudi</strong> service ensures safe long-distance travel. 
-We offer sedan and SUV vehicles for comfortable intercity journeys. 
-Whether it is business travel, temple trips, airport transfer or family vacation, 
-Bell Taxi Thoothukudi guarantees reliable service.
-</p>
-
-<h2>Popular Taxi Routes from Thoothukudi</h2>
-
-<div class="route-grid">
-
-<div class="route-card">
-<h3>Thoothukudi to Madurai Taxi</h3>
-<p>Most searched route for airport transfers and business travel.</p>
-<a href="thoothukudi-to-madurai-taxi.html" class="book-btn">Book Now</a>
 </div>
 
-<div class="route-card">
-<h3>Thoothukudi to Chennai Taxi</h3>
-<p>Long distance outstation taxi with professional drivers.</p>
-<a href="thoothukudi-to-madurai-taxi.html" class="book-btn">Book Now</a>
+<div class="routes">
+<h2>Popular Routes from Thoothukudi</h2>
+
+<a href="thoothukudi-to-madurai-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi → Madurai Taxi</div>
+<div class="route-sub">Airport drop & business travel taxi</div>
 </div>
+</a>
 
-<div class="route-card">
-<h3>Thoothukudi to Coimbatore Taxi</h3>
-<p>Affordable one-way and round trip taxi service.</p>
-<a href="thoothukudi-to-madurai-taxi.html" class="book-btn">Book Now</a>
+<a href="thoothukudi-to-chennai-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi → Chennai Taxi</div>
+<div class="route-sub">Long distance outstation cab</div>
 </div>
+</a>
 
-<div class="route-card">
-<h3>Thoothukudi to Trichy Taxi</h3>
-<p>Comfortable and safe taxi service for families.</p>
-<a href="thoothukudi-to-madurai-taxi.html" class="book-btn">Book Now</a>
+<a href="thoothukudi-to-coimbatore-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi → Coimbatore Taxi</div>
+<div class="route-sub">Oneway & round trip taxi</div>
 </div>
+</a>
 
-<div class="route-card">
-<h3>Thoothukudi to Madurai Airport Taxi</h3>
-<p>24x7 airport drop taxi service from Thoothukudi.</p>
-<a href="thoothukudi-to-madurai-taxi.html" class="book-btn">Book Now</a>
+<a href="thoothukudi-to-trichy-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi → Trichy Taxi</div>
+<div class="route-sub">Temple city & airport taxi</div>
 </div>
+</a>
 
-<div class="route-card">
-<h3>Thoothukudi to Rameshwaram Taxi</h3>
-<p>Outstation taxi service for temple trips.</p>
-<a href="thoothukudi-to-madurai-taxi.html" class="book-btn">Book Now</a>
+<a href="thoothukudi-to-Dindugal-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi → Dindugal Taxi</div>
+<div class="route-sub">Temple city & airport taxi</div>
 </div>
+</a>
 
+<a href="thoothukudi-to-rameswaram-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi → Rameswaram Taxi</div>
+<div class="route-sub">Pilgrim & family travel taxi</div>
 </div>
+</a>
 
-<h2>Round Trip Taxi in Thoothukudi</h2>
-
-<p>
-For customers searching “Round Trip Taxi Thoothukudi”, we provide flexible packages. 
-You can book our taxi for multi-day trips across Tamil Nadu. 
-We also offer customized packages for pilgrimage, family vacations and corporate travel.
-</p>
-
-<h2>Why Bell Taxi Thoothukudi?</h2>
-
-<ul>
-<li>Transparent pricing</li>
-<li>Professional & experienced drivers</li>
-<li>Clean & comfortable vehicles</li>
-<li>24x7 customer support</li>
-<li>Best rated Oneway Taxi in Thoothukudi</li>
-</ul>
-
-<p>
-If you are searching online for “best drop taxi in Thoothukudi”, 
-“cheap outstation taxi Thoothukudi”, or “fast airport taxi Thoothukudi”, 
-Bell Taxi is the trusted choice.
-</p>
-
+<a href="thoothukudi-to-nagercoil-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to nagercoil taxi.html Taxi</div>
+<div class="route-sub">Thoothukudi To Nagercoil Droptaxi</div>
 </div>
+</a>
 
-<!-- FOOTER -->
+<a href="thoothukudi-to-kovilpatti-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi → Kovilpatti Taxi</div>
+<div class="route-sub">Short distance drop taxi</div>
+</div>
+</a>
+
+<a href="thoothukudi-to-Tiruchendur-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to Tiruchendur Taxi</div>
+<div class="route-sub">Short distance drop taxi</div>
+</div>
+</a>
+
+<a href="thoothukudi-to-Karur-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to Karur Taxi</div>
+<div class="route-sub">Thoothukudi to karur drop taxi</div>
+</div>
+</a>
+
+<a href="thoothukudi-to-Erode-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to Erode Taxi</div>
+<div class="route-sub">Thoothukudi to Erode drop taxi</div>
+</div>
+</a>
+
+<a href="thoothukudi-to-Salem-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to Salem Taxi</div>
+<div class="route-sub">Thoothukudi to Salem drop taxi</div>
+</div>
+</a>
+
+<a href="thoothukudi-to-Sivakasi-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to Sivakasi Taxi</div>
+<div class="route-sub">Thoothukudi to Sivakasi drop taxi</div>
+</div>
+</a>
+
+<a href="thoothukudi-to-thiruvananthapuram-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to thiruvananthapuram Taxi</div>
+<div class="route-sub">Thoothukudi to thiruvananthapuram drop taxi</div>
+</div>
+</a>
+
+<a href="thoothukudi-to-thiruvananthapuram-Airport-taxi.html" class="route-card">
+<div class="route-icon">📍</div>
+<div>
+<div class="route-title">Thoothukudi to thiruvananthapuram airport Taxi</div>
+<div class="route-sub">Thoothukudi to thiruvananthapuram Airport drop taxi</div>
+</div>
+</a>
+
 <footer>
-🚕 Bell Taxi Thoothukudi <br>
-Oneway • Drop Taxi • Outstation • Round Trip <br>
-© 2026 Bell Taxi
+<strong>Bell Taxi Tamil Nadu</strong><br>
+Trusted Oneway, Drop Taxi & Round Trip service across Tamil Nadu.<br><br>
+
+📞 <a href="tel:8110000796">8110000796</a> |
+💬 <a href="https://wa.me/918110000796">WhatsApp Booking</a><br><br>
+
+© 2026 Bell Taxi. All Rights Reserved.
 </footer>
 
 </body>

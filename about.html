@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About Us | Bell Taxi</title>
+<meta name="description" content="About Bell Taxi – Trusted Oneway, Drop Taxi, Round Trip and Outstation Cab Service in Tamil Nadu since 2012. Safe, Affordable & 24x7 Taxi Service.">
+
+<link rel="icon" type="image/png"
+href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background:linear-gradient(135deg,#f8f9fb,#eef1f6);
+color:#222;
+}
+
+/* HEADER */
+.header{
+background:#fff;
+padding:12px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 10px rgba(0,0,0,.06)
+}
+.logo img{height:48px}
+.header-right{display:flex;gap:12px;align-items:center}
+.menu{font-size:28px;cursor:pointer}
+.icon-btn{
+width:44px;height:44px;border-radius:50%;
+display:flex;align-items:center;justify-content:center
+}
+.icon-btn img{width:22px}
+.call-btn{background:#1e40ff}
+.wa-btn{background:#25D366}
+
+/* MENU */
+#sideMenu{
+position:fixed;
+top:0;
+right:-100%;
+width:80%;
+height:100%;
+background:#fff;
+padding:30px 20px;
+transition:.3s ease;
+z-index:999;
+overflow-y:auto;
+box-shadow:-5px 0 20px rgba(0,0,0,.1);
+}
+#sideMenu a{
+display:block;
+padding:14px 0;
+text-decoration:none;
+color:#000;
+font-weight:500;
+border-bottom:1px solid #eee;
+}
+#sideMenu a.active{
+color:#ffb300;
+font-weight:700;
+}
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.4);
+display:none;
+z-index:998;
+}
+
+/* HERO */
+.hero{
+padding:50px 20px;
+text-align:center;
+background:linear-gradient(135deg,#FFD000,#ffb300);
+color:#000;
+}
+.hero h1{
+margin:0;
+font-size:30px;
+font-weight:800;
+}
+.hero p{
+margin-top:10px;
+font-size:15px;
+font-weight:600;
+}
+
+/* CONTENT */
+.container{
+max-width:900px;
+margin:-30px auto 50px;
+padding:0 16px;
+}
+.card{
+background:#fff;
+border-radius:20px;
+padding:30px;
+box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+h2{margin-top:24px;font-size:20px;font-weight:700}
+p{font-size:15px;line-height:1.8;color:#444}
+
+/* FOOTER */
+footer{
+background:linear-gradient(135deg,#0f172a,#111827);
+color:#fff;
+padding:60px 20px 25px;
+}
+.footer-grid{
+max-width:1200px;
+margin:0 auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:40px;
+}
+.footer-grid h3{color:#FFD000}
+.footer-grid a{color:#cbd5e1;text-decoration:none}
+.copyright{
+margin-top:40px;
+border-top:1px solid rgba(255,255,255,0.1);
+padding-top:20px;
+text-align:center;
+font-size:13px;
+color:#94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+<div class="logo">
+<a href="index.html">
+<img src="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
+</a>
+</div>
+
+<div class="header-right">
+<a href="tel:8110000796" class="icon-btn call-btn">
+<img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png">
+</a>
+<a href="https://wa.me/918110000796" class="icon-btn wa-btn">
+<img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png">
+</a>
+<div class="menu" onclick="openMenu()">☰</div>
+</div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- MENU -->
+<div id="sideMenu">
+<h2>Menu</h2>
+<a href="index.html">Home</a>
+<a href="service-cities.html">Service Cities</a>
+<a href="about.html" class="active">About Us</a>
+<hr>
+<a href="privacy-policy.html">Privacy Policy</a>
+<a href="terms.html">Terms & Conditions</a>
+<a href="refund-policy.html">Refund Policy</a>
+<a href="cancellation-policy.html">Cancellation Policy</a>
+<a href="luggage-policy.html">Luggage Policy</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+<h1>About Bell Taxi</h1>
+<p>Trusted Taxi Service in Tamil Nadu Since 2012</p>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+<div class="card">
+
+<p>
+Founded in <strong>2012</strong>, Bell Taxi has grown into one of the most trusted 
+Oneway, Drop Taxi and Round Trip service providers across Tamil Nadu.
+</p>
+
+<h2>Our Mission</h2>
+<p>
+To provide safe, reliable and affordable taxi services with transparent pricing 
+and professional drivers. We believe in customer satisfaction, comfort and punctuality.
+</p>
+
+<h2>Our Services</h2>
+<p>
+✔ Oneway Taxi Service<br>
+✔ Drop Taxi Service<br>
+✔ Round Trip Taxi<br>
+✔ Outstation Cabs<br>
+✔ Airport Transfers<br>
+✔ Tour Packages Across Tamil Nadu
+</p>
+
+<h2>Why Choose Bell Taxi?</h2>
+<p>
+• Transparent pricing with no hidden charges<br>
+• Experienced & verified drivers<br>
+• Clean and well-maintained vehicles<br>
+• 24×7 customer support<br>
+• On-time pickup guarantee
+</p>
+
+<h2>Our Coverage</h2>
+<p>
+We operate from Thoothukudi, Tiruchendur, Rameshwaram, Ramanathapuram 
+and serve major routes like Chennai, Madurai, Coimbatore, Trichy and Bangalore.
+</p>
+
+<h2>Customer Commitment</h2>
+<p>
+For more than a decade, Bell Taxi has been committed to delivering 
+safe travel experiences for families, business travelers and tourists.
+Your comfort and safety remain our top priority.
+</p>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:linear-gradient(135deg,#0b132b,#0f172a);color:#fff;padding:60px 20px 25px;">
+
+  <div style="max-width:1200px;margin:0 auto;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:40px;">
+
+    <!-- BRAND -->
+    <div>
+      <h2 style="color:#FFD000;margin-bottom:12px;font-size:22px;">
+        🚕 Bell Taxi
+      </h2>
+      <p style="color:#cbd5e1;font-size:14px;line-height:1.8;">
+        Trusted Oneway, Drop Taxi and Round Trip service across Tamil Nadu.
+        Safe, affordable and professional taxi services since 2012.
+      </p>
+
+      <div style="margin-top:15px;font-size:13px;color:#94a3b8;">
+        📍 1/210 B, Pearl City,<br>
+        Thoothukudi, Tamil Nadu – 628008
+      </div>
+    </div>
+
+    <!-- OUR SERVICES -->
+    <div>
+      <h3 style="color:#FFD000;margin-bottom:14px;font-size:18px;">
+        Our Services
+      </h3>
+      <ul style="list-style:none;padding:0;margin:0;color:#cbd5e1;font-size:14px;line-height:2;">
+        <li>✔ Oneway Trip</li>
+        <li>✔ Drop Taxi</li>
+        <li>✔ Round Trip</li>
+        <li>✔ Outstation Cabs</li>
+        <li>✔ Tour Packages</li>
+      </ul>
+    </div>
+
+    <!-- LEGAL -->
+    <div>
+      <h3 style="color:#FFD000;margin-bottom:14px;font-size:18px;">
+        Legal
+      </h3>
+      <ul style="list-style:none;padding:0;margin:0;font-size:14px;line-height:2;">
+        <li><a href="privacy-policy.html" style="color:#cbd5e1;text-decoration:none;">Privacy Policy</a></li>
+        <li><a href="terms.html" style="color:#cbd5e1;text-decoration:none;">Terms & Conditions</a></li>
+        <li><a href="refund-policy.html" style="color:#cbd5e1;text-decoration:none;">Refund Policy</a></li>
+        <li><a href="cancellation-policy.html" style="color:#cbd5e1;text-decoration:none;">Cancellation Policy</a></li>
+        <li><a href="luggage-policy.html" style="color:#cbd5e1;text-decoration:none;">Luggage Policy</a></li>
+      </ul>
+    </div>
+
+    <!-- CONTACT -->
+    <div>
+      <h3 style="color:#FFD000;margin-bottom:14px;font-size:18px;">
+        Contact Us
+      </h3>
+
+      <p style="font-size:14px;color:#cbd5e1;line-height:1.9;margin:0;">
+        📞 <a href="tel:8110000796" style="color:#FFD000;text-decoration:none;font-weight:600;">8110000796</a><br>
+
+        💬 <a href="https://wa.me/918110000796"
+        style="color:#25D366;text-decoration:none;font-weight:600;"
+        target="_blank">WhatsApp Booking</a><br>
+
+        📧 <a href="mailto:belltaxiservices@gmail.com"
+        style="color:#FFD000;text-decoration:none;font-weight:600;">
+        belltaxiservices@gmail.com
+        </a>
+      </p>
+
+      <div style="margin-top:15px;font-size:13px;color:#94a3b8;">
+        🕒 24×7 Customer Support
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM STRIP -->
+  <div style="max-width:1200px;margin:40px auto 0;
+  border-top:1px solid rgba(255,255,255,0.1);
+  padding-top:25px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;">
+
+    <div style="font-size:13px;color:#94a3b8;">
+      © 2026 Bell Taxi. All Rights Reserved.
+    </div>
+
+    <div style="font-size:13px;color:#94a3b8;">
+      Oneway • Drop Taxi • Round Trip • Tour Packages
+    </div>
+
+  </div>
+
+</footer>
+
+<script>
+function openMenu(){
+document.getElementById("sideMenu").style.right="0";
+document.getElementById("overlay").style.display="block";
+}
+function closeMenu(){
+document.getElementById("sideMenu").style.right="-100%";
+document.getElementById("overlay").style.display="none";
+}
+</script>
+
+</body>
+</html>
