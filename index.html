@@ -472,6 +472,8 @@ const pickup=document.getElementById("pickup").value.trim();
 const drop=document.getElementById("drop").value.trim();
 const date=document.getElementById("date").value;
 const time=document.getElementById("time").value;
+const mobileValue=document.getElementById("mobile").value.trim();
+const nameValue=document.getElementById("name").value.trim();
 const returnDate=document.getElementById("returnDate")?.value || null;
 const carType=document.getElementById("carType")?.value || "Sedan";
 let hillCharge = 0;
@@ -521,6 +523,10 @@ document.getElementById("mobile").classList.add("error");
 valid=false;
 }
 
+if(!nameValue){
+document.getElementById("name").classList.add("error");
+valid=false;
+}
 if(!valid){
 alert("Please fill all required fields");
 btn.disabled=false;
@@ -675,7 +681,7 @@ text:msg
 
 /* REDIRECT */
 /* REDIRECT */
-window.location.href=
+window.location.href =
 `fare.html?fare=${totalFare}` +
 `&km=${Math.round(totalKM)}` +
 `&pickup=${encodeURIComponent(pickup)}` +
@@ -687,7 +693,6 @@ window.location.href=
 `&time=${time}` +
 `&days=${returnDate ? (Math.floor((new Date(returnDate)-new Date(date))/(1000*60*60*24))+1) : 1}` +
 `&returnDate=${returnDate ? returnDate : ""}`;
-
 });
 
 }
