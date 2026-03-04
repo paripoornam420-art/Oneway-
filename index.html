@@ -462,7 +462,8 @@ const btn=document.getElementById("locBtn");
 const pickup=document.getElementById("pickup");
 
 btn.disabled=true;
-pickup.value="Getting current location...";
+pickup.value="Searching for location...";
+pickup.disabled=true;
 
 if(!navigator.geolocation){
 pickup.value="Geolocation not supported";
@@ -529,6 +530,7 @@ const nameValue=document.getElementById("name").value.trim();
 const returnDate=document.getElementById("returnDate")?.value || null;
 const carType=document.getElementById("carType")?.value || "Sedan";
 let hillCharge = 0;
+let driverBata = 0;
 
 const dropCity = drop.toLowerCase();
 
@@ -576,41 +578,6 @@ valid=false;
 }
 if(!valid){
 alert("Please fill all required fields");
-btn.disabled=false;
-return;
-if(!pickup){
-document.getElementById("pickup").classList.add("error");
-valid=false;
-}
-
-if(!drop){
-document.getElementById("drop").classList.add("error");
-valid=false;
-}
-
-if(!date){
-document.getElementById("date").classList.add("error");
-valid=false;
-}
-
-if(!time){
-document.getElementById("time").classList.add("error");
-valid=false;
-}
-
-if(!nameValue){
-document.getElementById("name").classList.add("error");
-valid=false;
-}
-
-if(!mobileValue){
-document.getElementById("mobile").classList.add("error");
-valid=false;
-}}
-
-/* Validate mobile number */
-if(mobileValue.length < 10){
-alert("Please enter valid mobile number.");
 btn.disabled=false;
 return;
 }
@@ -674,7 +641,7 @@ const start=new Date(date);
 const end=new Date(returnDate);
 const diffTime=end-start;
 const days=Math.floor(diffTime/(1000*60*60*24))+1;
-let driverBata = days * 400;
+driverBata = days * 400;
 
 /* Thoothukudi 1 Day Special */
 if(isThoothukudi && days===1){
@@ -711,8 +678,6 @@ totalFare = totalFare + driverBata; totalFare = Math.round(totalFare);
 /* TELEGRAM */
 const bookingID = "BT-" + Date.now().toString().slice(-6);
 
-const nameValue = document.getElementById("name").value.trim();
-const mobileValue = document.getElementById("mobile").value.trim();
 const cleanMobile = mobileValue.replace(/\D/g, "");
 
 let mapLink = "";
@@ -802,15 +767,19 @@ document.getElementById("farePreview").innerHTML =
 });
 }
 function initMap(){
+
 new google.maps.places.Autocomplete(document.getElementById("pickup"));
 new google.maps.places.Autocomplete(document.getElementById("drop"));
+
+document.getElementById("pickup").addEventListener("change",previewFare);
+document.getElementById("drop").addEventListener("change",previewFare);
+
 }
 
-...your existing JavaScript...
-
-document.getElementById("todayBookings").innerText =
-Math.floor(Math.random()*15)+18;
-
+const bookingEl = document.getElementById("todayBookings");
+if(bookingEl){
+bookingEl.innerText = Math.floor(Math.random()*15)+18;
+}
 </script>
 
 ...
@@ -870,6 +839,8 @@ document.getElementById("drop").addEventListener("focus",loadGoogleMaps);
 document.getElementById("pickup").addEventListener("change",previewFare);
 document.getElementById("drop").addEventListener("change",previewFare);
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXtuY-hFCN0GXyK9_uDBxJYyef1nEWReo&libraries=places&callback=initMap" async defer></script>
 
 </body>
 </html>
