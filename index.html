@@ -630,8 +630,6 @@ let minKM = 130;
 if(isThoothukudi) minKM = 100;
 
 let chargedKM = Math.max(actualKM, minKM);
-
-totalKM = actualKM;  // show real distance
 totalFare = baseFare + (chargedKM * perKm);
 }
 
@@ -724,7 +722,7 @@ text:msg
 /* REDIRECT */
 window.location.href =
 `fare.html?fare=${totalFare}` +
-`&km=${Math.round(totalKM)}` +
+`&km=${Math.round(actualKM)}` +
 `&pickup=${encodeURIComponent(pickup)}` +
 `&drop=${encodeURIComponent(drop)}` +
 `&trip=${trip}` +
