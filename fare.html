@@ -258,8 +258,14 @@ minKM=250*days;
 }
 }
 
+let usedKM = km < minKM ? minKM : km;
 let displayKM = km < minKM ? "Upto " + minKM + " KM" : km + " KM";
-let total=Math.round(baseFare+(usedKM*car.rate));
+
+let tripText = trip === "oneway"
+ ? displayKM
+ : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
+
+let total = Math.round(baseFare + (usedKM * car.rate));
 
 html+=`
 <div class="card">
@@ -269,9 +275,7 @@ ${car.badge?`<div class="badge">${car.badge}</div>`:""}
 <div class="trip-type">${trip}</div>
 </div>
 <div class="total-fare">₹ ${total}</div>
-<div class="upto">
-${trip === "oneway" ? displayKM : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")"}
-</div>content://com.android.externalstorage.documents/tree/primary%3ABell%20Transfer%20drop::primary:Bell Transfer drop/fare.htmlcontent://com.android.externalstorage.documents/tree/primary%3ABell%20Transfer%20drop::primary:Bell Transfer drop/fare.htmlcontent://com.android.externalstorage.documents/tree/primary%3ABell%20Transfer%20drop::primary:Bell Transfer drop/fare.html
+<div class="upto">${tripText}</div>
 <div class="extra">Extra KM: ₹${car.rate} / KM</div>
 <div class="note-line">
 ${car.name.includes("SUV")
@@ -328,6 +332,10 @@ if(trip==="oneway"){
 }
 
 let usedKM = km < minKM ? minKM : km;
+let displayKM = km < minKM ? "Upto " + minKM + " KM" : km + " KM";
+let tripText = trip === "oneway"
+  ? displayKM
+  : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
 
 const mapLink = "https://www.google.com/maps?q=" + encodeURIComponent(pickup);
 
