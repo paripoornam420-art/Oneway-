@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bell Taxi Fare</title>
+
+<link rel="icon" type="image/png"
+href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f4f6f9}
+
+/* HEADER */
+.header{
+background:#fff;
+padding:12px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 6px rgba(0,0,0,.08)
+}
+.logo img{height:48px}
+.header-right{display:flex;gap:12px;align-items:center}
+.menu{font-size:28px;cursor:pointer}
+.icon-btn{
+width:44px;height:44px;border-radius:50%;
+display:flex;align-items:center;justify-content:center
+}
+.icon-btn img{width:22px}
+.call-btn{background:#1e40ff}
+.wa-btn{background:#25D366}
+
+/* MENU */
+#sideMenu{
+position:fixed;top:0;right:-100%;
+width:80%;height:100%;
+background:#fff;padding:30px 20px;
+transition:.3s ease;z-index:999
+}
+#sideMenu a{
+display:block;font-size:20px;
+padding:14px 0;text-decoration:none;color:#000
+}
+.overlay{
+position:fixed;top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,.4);
+display:none;z-index:998
+}
+
+/* MARQUEE */
+.marquee{
+background:#ffc400;padding:6px 0;
+overflow:hidden;white-space:nowrap;font-weight:bold
+}
+.marquee span{
+display:inline-block;padding-left:100%;
+animation:scroll 18s linear infinite
+}
+@keyframes scroll{
+0%{transform:translateX(0)}
+100%{transform:translateX(-100%)}
+}
+
+/* CONTENT */
+.container{padding:16px}
+
+.card{
+background:#fff;
+border-radius:20px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 10px 28px rgba(0,0,0,.08);
+position:relative;
+}
+
+.badge{
+position:absolute;
+top:12px;
+right:12px;
+background:linear-gradient(45deg,#ff9800,#ff5722);
+color:#fff;
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+
+.card-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.car-title{font-size:18px;font-weight:700}
+.trip-type{font-size:13px;color:#777;text-transform:capitalize}
+
+.total-fare{
+font-size:28px;
+font-weight:800;
+color:#2e9c4d;
+margin:8px 0 2px 0;
+}
+
+.upto{font-size:14px;color:#666;margin-bottom:10px}
+.extra{font-size:14px;color:#555;margin-bottom:6px}
+.note-line{font-size:12px;color:#888;margin-bottom:12px}
+
+.pay-box{
+background:#f2f3f5;
+padding:14px;
+border-radius:16px;
+}
+
+.radio{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:8px;
+font-size:14px;
+}
+
+.radio label{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.book-btn{
+margin-top:12px;
+background:#f5b000;
+border:none;
+padding:14px;
+width:100%;
+font-size:16px;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.driver-btn{
+margin-top:10px;
+background:#2e9c4d;
+color:#fff;
+border:none;
+padding:14px;
+width:100%;
+font-size:15px;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="logo">
+<img src="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
+</div>
+<div class="header-right">
+<a href="tel:08110000796" class="icon-btn call-btn">
+<img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png">
+</a>
+<a href="https://wa.me/918110000796" class="icon-btn wa-btn">
+<img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png">
+</a>
+<div class="menu" onclick="openMenu()">☰</div>
+</div>
+</div>
+
+<div class="marquee">
+<span>
+Bell Taxi – Safe, Reliable & Affordable Taxi Services |
+One-Way Taxi | Outstation Cabs | 24×7 Customer Support |
+Pay for One-Way Only – No Hidden Charges
+</span>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<div id="sideMenu">
+<a href="index.html">Home</a>
+<a href="#">Service Cities</a>
+<a href="#">About Us</a>
+<a href="#">Privacy Policy</a>
+</div>
+
+<div class="container">
+<div id="fareContainer"></div>
+</div>
+
+<script>
+
+/* MENU */
+function openMenu(){
+sideMenu.style.right="0";
+overlay.style.display="block";
+}
+function closeMenu(){
+sideMenu.style.right="-100%";
+overlay.style.display="none";
+}
+
+/* TELEGRAM */
+const BOT_TOKEN="8335405675:AAEk3BCfHvABEC60Ox_JaO3NneHQ9HNqSK4";
+const CHAT_ID="-1003520333892";
+
+/* GET URL DATA */
+const params=new URLSearchParams(window.location.search);
+
+const km=parseFloat(params.get("km"))||0;
+const pickup=params.get("pickup")||"";
+const drop=params.get("drop")||"";
+const trip=params.get("trip")||"oneway";
+const name=params.get("name")||"";
+const mobile=params.get("mobile")||"";
+const date=params.get("date")||"";
+const time=params.get("time")||"";
+const days=parseInt(params.get("days"))||1;
+
+if(km===0){
+alert("Distance missing. Please check fare again.");
+}
+
+const baseFare=400;
+const bookingID="BT-"+Math.floor(100000+Math.random()*900000);
+
+/* CAR DATA */
+const cars=[
+{name:"Sedan",rate:13,badge:"Most Booked"},
+{name:"Premium Sedan",rate:14},
+{name:"SUV",rate:19},
+{name:"Premium SUV",rate:20}
+];
+
+let html="";
+
+cars.forEach(car=>{
+
+let isThoothukudi=pickup.toLowerCase().includes("thoothukudi");
+
+let minKM;
+
+if(trip==="oneway"){
+minKM=isThoothukudi?100:130;
+}else{
+if(isThoothukudi && days===1){
+minKM=150;
+}else{
+minKM=250*days;
+}
+}
+
+let usedKM = km < minKM ? minKM : km;
+let displayKM = km < minKM ? "Upto " + minKM + " KM" : km + " KM";
+
+let tripText = trip === "oneway"
+ ? displayKM
+ : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
+
+let total = Math.round(baseFare + (usedKM * car.rate));
+
+html+=`
+<div class="card">
+${car.badge?`<div class="badge">${car.badge}</div>`:""}
+<div class="card-header">
+<div class="car-title">${car.name}</div>
+<div class="trip-type">${trip}</div>
+</div>
+<div class="total-fare">₹ ${total}</div>
+<div class="upto">${tripText}</div>
+<div class="extra">Extra KM: ₹${car.rate} / KM</div>
+<div class="note-line">
+${car.name.includes("SUV")
+? "Toll, Parking, State Permit, Carrier Charges Extra"
+: "Toll, Parking, State Permit Charges Extra"}
+</div>
+<div class="pay-box">
+<div class="radio">
+<label>
+<input type="radio" name="pay_${car.name}" value="advance" checked>
+Advance ₹500
+</label>
+<span>Balance ₹${total-500}</span>
+</div>
+<div class="radio">
+<label>
+<input type="radio" name="pay_${car.name}" value="full">
+Full Payment
+</label>
+<span>₹${total}</span>
+</div>
+</div>
+<button class="book-btn"
+onclick="startPayment('${car.name}',${total})">
+Proceed to Pay
+</button>
+<button class="driver-btn"
+onclick="payToDriver('${car.name}',${total})">
+Book Now Pay Later
+</button>
+</div>
+`;
+});
+
+fareContainer.innerHTML=html;
+
+/* SEND TELEGRAM + REDIRECT */
+function sendTelegramAndRedirect(car,total,paid,balance,type,paymentID){
+
+const cleanMobile = mobile.replace(/\D/g,'');
+
+let isThoothukudi = pickup.toLowerCase().includes("thoothukudi");
+
+let minKM;
+
+if(trip==="oneway"){
+  minKM = isThoothukudi ? 100 : 130;
+}else{
+  if(isThoothukudi && days===1){
+    minKM = 150;
+  }else{
+    minKM = 250*days;
+  }
+}
+
+let usedKM = km < minKM ? minKM : km;
+let displayKM = km < minKM ? "Upto " + minKM + " KM" : km + " KM";
+let tripText = trip === "oneway"
+  ? displayKM
+  : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
+
+const mapLink = "https://www.google.com/maps?q=" + encodeURIComponent(pickup);
+
+const message =
+`🚕 Bell Taxi Booking Confirmation
+
+🆔 Booking ID: ${bookingID}
+
+👤 Name: ${name}
+📞 Mobile Number: ${cleanMobile}
+💬 WhatsApp Chat: https://wa.me/91${cleanMobile}
+
+📍 Pickup: ${pickup}
+🗺 Location Map: ${mapLink}
+
+🏁 Drop: ${drop}
+
+🚗 Car Type: ${car}
+🚘 Trip Type: ${trip}
+📅 Date: ${date}
+⏰ Time: ${time}
+
+📏 Distance: ${usedKM} KM
+
+💰 Total: ₹${total}
+💵 Paid: ₹${paid}
+💼 Balance: ₹${balance}
+💳 Payment Type: ${type}
+🆔 Payment ID: ${paymentID}`;
+
+fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({chat_id:CHAT_ID,text:message})
+})
+.then(()=>{
+
+localStorage.setItem("finalBooking",JSON.stringify({
+bookingID:bookingID,
+name:name,
+contact:mobile,
+pickup:pickup,
+drop:drop,
+tripType:trip,
+car:car,
+total:total,
+mobile:mobile,
+date:date,
+time:time,
+km:usedKM
+}));
+
+window.location.href="confirm.html";
+
+})
+.catch(()=>{
+alert("Telegram failed. Check bot or channel ID.");
+});
+}
+
+/* RAZORPAY */
+function startPayment(car,total){
+
+let type=document.querySelector(`input[name="pay_${car}"]:checked`).value;
+let payAmount=type==="advance"?500:total;
+let balance=total-payAmount;
+
+var options={
+"key":"rzp_live_3LcdTeTeyHKk5j",
+"amount":payAmount*100,
+"currency":"INR",
+"name":"Bell Taxi",
+"description":car+" Booking",
+"handler":function(response){
+sendTelegramAndRedirect(
+car,total,payAmount,balance,"ONLINE",
+response.razorpay_payment_id
+);
+},
+"prefill":{"name":name,"contact":mobile},
+"theme":{"color":"#f5b000"}
+};
+new Razorpay(options).open();
+}
+
+function payToDriver(car,total){
+
+sendTelegramAndRedirect(
+car,total,0,total,"PAY TO DRIVER","N/A"
+);
+
+}
+</script>
+
+</body>
+</html>
