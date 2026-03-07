@@ -304,7 +304,7 @@ Proceed to Pay
 </button>
 <button class="driver-btn"
 onclick="payToDriver('${car.name}',${total})">
-Pay Full Amount To Driver
+Book Now Pay Later
 </button>
 </div>
 `;
@@ -422,7 +422,7 @@ new Razorpay(options).open();
 }
 
 function payToDriver(car,total){
-if(!confirm("Confirm Pay Full Amount To Driver?")) return;
+if(!confirm("Confirm Book Now Pay Later?")) return;
 sendTelegramAndRedirect(
 car,total,0,total,"PAY TO DRIVER","N/A"
 );
