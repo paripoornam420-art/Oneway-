@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Confirmed | Droptaxi</title>
+<title>Booking Confirmed | Bell Taxi</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
 
@@ -81,11 +81,11 @@ Booking Confirmed <br> Driver Assigned Soon 🚗
 <div class="card" id="details"></div>
 
 <button class="btn whatsapp-btn" onclick="shareWhatsApp()">
-📍 Share Booking on WhatsApp
+📍 Share to My WhatsApp
 </button>
 
 <button class="btn call-btn" onclick="callSupport()">
-📞 Call Support – +918062178752
+📞 Call Support – +918110000796
 </button>
 
 <script>
@@ -111,7 +111,7 @@ function shareWhatsApp(){
     encodeURIComponent(booking.pickup);
 
   const message =
-`🚕 DROPTAXI BOOKING CONFIRMED
+`🚕 Bell Tqxi Booking Confirmation
 
 🆔 Booking ID: ${booking.bookingID}
 👤 Name: ${booking.name}
@@ -130,13 +130,13 @@ ${booking.drop}
 ${pickupMap}`;
 
   const whatsappURL =
-    "https://wa.me/+918062178752?text=" + encodeURIComponent(message);
+    "https://wa.me/+918110000796?text=" + encodeURIComponent(message);
 
   window.open(whatsappURL,"_blank");
 }
 
 function callSupport(){
-  window.location.href="tel:+918062178752";
+  window.location.href="tel:+918110000796";
 }
 
 </script>
