@@ -8,8 +8,6 @@
 <link rel="icon" type="image/png"
 href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
 <style>
 .gst-bar{
 background:#0b1a3c;
@@ -278,12 +276,11 @@ alert("Distance missing. Please check fare again.");
 const baseFare=400;
 const bookingID="BT-"+Math.floor(100000+Math.random()*900000);
 
-/* CAR DATA */
 const cars=[
-{name:"Any Sedan 4+1",rate:13,badge:"Most Booked"},
-{name:"Premium Sedan",rate:14},
-{name:"Any SUV 7+1",rate:19},
-{name:"Premium SUV",rate:20}
+{name:"Any Sedan 4+1",rate:14,bata:300,badge:"Most Booked"},
+{name:"Premium Sedan",rate:14,bata:400},
+{name:"Any SUV 7+1",rate:19,bata:400},
+{name:"Premium SUV",rate:20,bata:400}
 ];
 
 let html="";
@@ -311,7 +308,7 @@ let tripText = trip === "oneway"
  ? displayKM
  : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
 
-let total = Math.round(baseFare + (usedKM * car.rate));
+let total = Math.round((usedKM * car.rate) + car.bata);
 
 html+=`
 <div class="card">
@@ -354,36 +351,40 @@ style="width:38px">
 </span>
 
 </div>
-<div class="upto">${tripText}</div>
-<div class="extra">Extra KM: ₹${car.rate} / KM</div>
-<div class="note-line">
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:10px;
+font-size:15px;
+font-weight:700;
+color:#111;
+">
+
+<div>
+📏 ${tripText}
+</div>
+
+<div>
+💸 Extra KM ₹${car.rate}/KM
+</div>
+
+</div>
+<div style="
+text-align:center;
+color:#e11d48;
+font-size:14px;
+font-weight:700;
+margin-top:8px;
+margin-bottom:12px;
+">
 ${car.name.includes("SUV")
 ? "Toll, Parking, State Permit, Carrier Charges Extra"
 : "Toll, Parking, State Permit Charges Extra"}
 </div>
-<div class="pay-box">
-<div class="radio">
-<label>
-<input type="radio" name="pay_${car.name}" value="advance" checked>
-Advance ₹500
-</label>
-<span>Balance ₹${total-500}</span>
-</div>
-<div class="radio">
-<label>
-<input type="radio" name="pay_${car.name}" value="full">
-Full Payment
-</label>
-<span>₹${total}</span>
-</div>
-</div>
-<button class="book-btn"
-onclick="startPayment('${car.name}',${total})">
-Proceed to Pay
-</button>
 <button class="driver-btn"
 onclick="payToDriver('${car.name}',${total})">
-Book Now Pay Later
+Book Now
 </button>
 </div>
 `;
@@ -475,35 +476,10 @@ alert("Telegram failed. Check bot or channel ID.");
 });
 }
 
-/* RAZORPAY */
-function startPayment(car,total){
-
-let type=document.querySelector(`input[name="pay_${car}"]:checked`).value;
-let payAmount=type==="advance"?500:total;
-let balance=total-payAmount;
-
-var options={
-"key":"rzp_live_3LcdTeTeyHKk5j",
-"amount":payAmount*100,
-"currency":"INR",
-"name":"Bell Taxi",
-"description":car+" Booking",
-"handler":function(response){
-sendTelegramAndRedirect(
-car,total,payAmount,balance,"ONLINE",
-response.razorpay_payment_id
-);
-},
-"prefill":{"name":name,"contact":mobile},
-"theme":{"color":"#f5b000"}
-};
-new Razorpay(options).open();
-}
-
 function payToDriver(car,total){
 
 sendTelegramAndRedirect(
-car,total,0,total,"PAY TO DRIVER","N/A"
+car,total,0,total,"BOOK NOW","N/A"
 );
 
 }
