@@ -433,7 +433,8 @@ let tripText = trip === "oneway"
   : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
 
 const mapLink = "https://www.google.com/maps?q=" + encodeURIComponent(pickup);
-
+const pickupCity = pickup.split(",")[2]?.trim() || pickup;
+const dropCity = drop.split(",")[0]?.trim() || drop;
 const gpsLocation =
 pickup.includes(",")
 ? `📍 GPS Pickup Location:
@@ -447,7 +448,7 @@ const message =
 
 🆔 Booking ID: ${bookingID}
 
-${gpsLocation}📍 Trip: ${pickup} → ${drop}
+${gpsLocation}📍 Trip: ${pickupCity} → ${dropCity}
 📏 Distance: Approx. ${Math.round(usedKM)} KM
 
 📅 Date: ${date}
