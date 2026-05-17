@@ -274,7 +274,22 @@ alert("Distance missing. Please check fare again.");
 }
 
 const baseFare=400;
-const bookingID="BT-"+Math.floor(100000+Math.random()*900000);
+const now = new Date();
+
+const month = String(now.getMonth() + 1).padStart(2, "0");
+const year = String(now.getFullYear()).slice(-2);
+
+const bookingKey = `bookingCounter_${month}${year}`;
+
+let bookingCounter = localStorage.getItem(bookingKey) || 0;
+
+bookingCounter++;
+
+localStorage.setItem(bookingKey, bookingCounter);
+
+const serial = String(bookingCounter).padStart(3, "0");
+
+const bookingID = `${month}${year}${serial}`;
 
 const cars=[
 {name:"Any Sedan 4+1",rate:14,bata:300,badge:"Most Booked"},
@@ -419,32 +434,36 @@ let tripText = trip === "oneway"
 
 const mapLink = "https://www.google.com/maps?q=" + encodeURIComponent(pickup);
 
+const gpsLocation =
+pickup.includes(",")
+? `📍 GPS Pickup Location:
+${mapLink}
+
+`
+: "";
+
 const message =
 `🚕 Bell Taxi Booking Confirmation
 
 🆔 Booking ID: ${bookingID}
 
-👤 Name: ${name}
-📞 Mobile Number: ${cleanMobile}
-💬 WhatsApp Chat: https://wa.me/91${cleanMobile}
+${gpsLocation}📍 Trip: ${pickup} → ${drop}
+📏 Distance: Approx. ${Math.round(usedKM)} KM
 
-📍 Pickup: ${pickup}
-🗺 Location Map: ${mapLink}
-
-🏁 Drop: ${drop}
-
-🚗 Car Type: ${car}
-🚘 Trip Type: ${trip}
 📅 Date: ${date}
 ⏰ Time: ${time}
+🚗 Trip Type: ${trip === "oneway" ? "Oneway" : "Round Trip"}
 
-📏 Distance: ${usedKM} KM
+👤 Name: ${name}
+📞 Customer No: ${cleanMobile}
 
-💰 Total: ₹${total}
-💵 Paid: ₹${paid}
-💼 Balance: ₹${balance}
-💳 Payment Type: ${type}
-🆔 Payment ID: ${paymentID}`;
+💰 Tariff:
+• ${car} – ₹${car.includes("SUV") ? car.includes("Premium") ? 20 : 19 : 14}/KM
+• Driver Bata – ₹${car.bata || 400}
+
+💵 Approx Fare: ₹${total}
+
+⚠ Toll, Parking & State Permit Charges Extra`;
 
 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
 method:"POST",
