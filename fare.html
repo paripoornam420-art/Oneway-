@@ -432,7 +432,7 @@ let tripText = trip === "oneway"
   ? displayKM
   : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
 
-const mapLink = "https://www.google.com/maps?q=" + encodeURIComponent(pickup);
+const mapLink = `https://maps.google.com/?q=${lat},${lng}`;
 const pickupCity = pickup.split(",")[2]?.trim() || pickup;
 const dropCity = drop.split(",")[0]?.trim() || drop;
 const gpsLocation =
