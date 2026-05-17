@@ -694,25 +694,23 @@ if (pickup.includes(",")) {
   mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(pickup)}`;
 }
 
-const msg = `🚕 Bell Taxi Enquiry
+const pickupCity = pickup.split(",")[2]?.trim() || pickup;
+const dropCity = drop.split(",")[0]?.trim() || drop;
 
-🆔 Booking ID: ${bookingID}
+const enquiryKM = Math.round(totalKM);
 
-👤 Name: ${nameValue}
-📞 Mobile Number: ${cleanMobile} 💬 WhatsApp Chat: https://wa.me/91${cleanMobile}
+const msg = `🚕 Thank you for your Bell Taxi enquiry, ${nameValue}!
 
-📍 Pickup: ${pickup}
-🗺 Location Map: ${mapLink}
+📍 ${pickupCity} to ${dropCity}
+📅 ${date} | ⏰ ${time}
+📞 Customer No: ${cleanMobile}
+🚗 ${trip === "oneway"
+? `Oneway Trip | ${enquiryKM} KM`
+: `Round Trip | ${enquiryKM} KM
+🔁 Return Date: ${returnDate}
+📆 Total Days: ${Math.floor((new Date(returnDate)-new Date(date))/(1000*60*60*24))+1} Day(s)` }
 
-🏁 Drop: ${drop}
-
-🚗 Trip Type: ${trip}
-📅 Date: ${date}
-⏰ Time: ${time}
-
-📏 Distance: ${Math.round(totalKM)} KM
-🏔 Hill Charge: ₹${hillCharge}
-👨‍✈️ Driver Bata: ₹${driverBata}`;
+To proceed, please call us at 8110000796, or continue on www.belltaxi.in`;
 
 try{
 await fetch("https://api.telegram.org/bot8502831495:AAFQ4cQ4L0wzFEkcQaW-hjWHJkrOJWHhYpE/sendMessage",{
