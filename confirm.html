@@ -111,11 +111,12 @@ function shareWhatsApp(){
     encodeURIComponent(booking.pickup);
 
   const message =
-`🚕 Bell Tqxi Booking Confirmation
+`🚕 Bell Taxi Booking Confirmation
 
 🆔 Booking ID: ${booking.bookingID}
+
 👤 Name: ${booking.name}
-📞 Contact: ${booking.mobile}
+📞 Customer No: ${booking.mobile}
 
 📍 Pickup:
 ${booking.pickup}
@@ -123,11 +124,19 @@ ${booking.pickup}
 🏁 Drop:
 ${booking.drop}
 
-🚗 Car: ${booking.car}
-💰 Total Fare: ₹${booking.total}
+📅 Journey Date: ${booking.date}
+⏰ Journey Time: ${booking.time}
 
-🗺 Pickup Map:
-${pickupMap}`;
+🚗 Trip Type: ${booking.tripType}
+
+🚘 Vehicle Type: ${booking.car}
+
+💵 Approx Fare: ₹${booking.total}
+
+⚠ Toll, Parking & State Permit Charges Extra
+
+✅ Driver Details Shared Soon
+✅ No Advance Payment Required`;
 
   const whatsappURL =
     "https://wa.me/+918110000796?text=" + encodeURIComponent(message);
