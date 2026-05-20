@@ -699,10 +699,31 @@ const dropCity = drop.split(",")[0]?.trim() || drop;
 
 const enquiryKM = Math.round(totalKM);
 
-const enquiryKM = Math.round(totalKM);
-
 const sedanFare =
-Math.round((Math.max(actualKM,130) * 14) + 300);
+Math.round((Math.max(enquiryKM,130) * 14) + 300);
+
+let tripDetails = "";
+
+if(trip === "oneway"){
+
+tripDetails = `🚗 Oneway Trip | ${enquiryKM} KM`;
+
+}else{
+
+const totalDays =
+Math.floor(
+(new Date(returnDate) - new Date(date))
+/
+(1000 * 60 * 60 * 24)
+) + 1;
+
+tripDetails = `🚗 Round Trip | ${enquiryKM} KM
+
+🔁 Return Date: ${returnDate}
+
+📆 Total Days: ${totalDays} Day(s)`;
+
+}
 
 const msg = `🚕 Thank you for your Bell Taxi enquiry, ${nameValue.toUpperCase()}!
 
@@ -711,13 +732,10 @@ const msg = `🚕 Thank you for your Bell Taxi enquiry, ${nameValue.toUpperCase(
 📍 Drop: ${drop}
 
 📅 ${date} | ⏰ ${time}
+
 📞 Customer No: ${cleanMobile}
 
-🚗 ${trip === "oneway"
-? `Oneway Trip | ${enquiryKM} KM`
-: `Round Trip | ${enquiryKM} KM
-🔁 Return Date: ${returnDate}
-📆 Total Days: ${Math.floor((new Date(returnDate)-new Date(date))/(1000*60*60*24))+1} Day(s)` }
+${tripDetails}
 
 🚘 Vehicle Type: Any Sedan (Default)
 
