@@ -699,16 +699,31 @@ const dropCity = drop.split(",")[0]?.trim() || drop;
 
 const enquiryKM = Math.round(totalKM);
 
-const msg = `🚕 Thank you for your Bell Taxi enquiry, ${nameValue}!
+const enquiryKM = Math.round(totalKM);
 
-📍 ${pickupCity} to ${dropCity}
+const sedanFare =
+Math.round((Math.max(actualKM,130) * 14) + 300);
+
+const msg = `🚕 Thank you for your Bell Taxi enquiry, ${nameValue.toUpperCase()}!
+
+📍 Pickup: ${pickup}
+
+📍 Drop: ${drop}
+
 📅 ${date} | ⏰ ${time}
 📞 Customer No: ${cleanMobile}
+
 🚗 ${trip === "oneway"
 ? `Oneway Trip | ${enquiryKM} KM`
 : `Round Trip | ${enquiryKM} KM
 🔁 Return Date: ${returnDate}
 📆 Total Days: ${Math.floor((new Date(returnDate)-new Date(date))/(1000*60*60*24))+1} Day(s)` }
+
+🚘 Vehicle Type: Any Sedan (Default)
+
+💵 Approximate Fare: ₹${sedanFare}
+
+⚠ Toll, Parking & State Permit Charges Extra
 
 To proceed, please call us at 8110000796, or continue on www.belltaxi.in`;
 
