@@ -110,33 +110,28 @@ function shareWhatsApp(){
     "https://www.google.com/maps/search/?api=1&query=" +
     encodeURIComponent(booking.pickup);
 
-  const message =
-`🚕 Bell Taxi Booking Confirmation
+const message =
+`*HI ${booking.name.toUpperCase()}, Your Bell Taxi Booking Confirmed With Booking ID : ${booking.bookingID}*
 
-🆔 Booking ID: ${booking.bookingID}
+📞 *Customer No:* ${booking.mobile}
 
-👤 Name: ${booking.name}
-📞 Customer No: ${booking.mobile}
+📍 *Pickup:* ${booking.pickup}
 
-📍 Pickup:
-${booking.pickup}
+📍 *Drop:* ${booking.drop}
 
-🏁 Drop:
-${booking.drop}
+*${booking.date} / ${booking.time}*
 
-📅 Journey Date: ${booking.date}
-⏰ Journey Time: ${booking.time}
+*${booking.tripType} Trip / ${booking.car}*
 
-🚗 Trip Type: ${booking.tripType}
+*•₹14/KM / Bata ₹400*
 
-🚘 Vehicle Type: ${booking.car}
-
-💵 Approx Fare: ₹${booking.total}
+💵 *Fare: ₹${booking.total}* Upto *${booking.km} Km*
 
 ⚠ Toll, Parking & State Permit Charges Extra
 
-✅ Driver Details Shared Soon
-✅ No Advance Payment Required`;
+Thanks For Choosing Us
+🔔 *Bell Taxi* 📞 *8110000796*
+https://belltaxi.in/`;
 
   const whatsappURL =
     "https://wa.me/+918110000796?text=" + encodeURIComponent(message);
