@@ -502,27 +502,27 @@ ${mapLink}
 : "";
 
 const message =
-`🚕 Bell Taxi Booking Confirmation
+`*Bell Taxi Booking Received* From ${name} With *Booking ID : ${bookingID}*
 
-🆔 Booking ID: ${bookingID}
+📞 *Customer No:* ${cleanMobile}
 
-${gpsLocation}📍 Trip: ${pickupCity} → ${dropCity}
-📏 Distance: Approx. ${Math.round(usedKM)} KM
+📍 *Pickup:* ${pickup}
 
-📅 Date: ${date}
-⏰ Time: ${time}
-🚗 Trip Type: ${trip === "oneway" ? "Oneway" : "Round Trip"}
+📍 *Drop:* ${drop}
 
-👤 Name: ${name}
-📞 Customer No: ${cleanMobile}
+*${date} / ${time}*
 
-💰 Tariff:
-• ${car} – ₹${car.includes("SUV") ? car.includes("Premium") ? 20 : 19 : 14}/KM
-• Driver Bata – ₹${car.bata || 400}
+*${trip === "oneway" ? "Oneway" : "Round Trip"} Trip / ${car}*
 
-💵 Approx Fare: ₹${total}
+*•₹${car.includes("SUV")
+? car.includes("Premium") ? 20 : 19
+: 14}/KM / Bata ₹${car.includes("Sedan") ? 300 : 400}*
 
-⚠ Toll, Parking & State Permit Charges Extra`;
+💵 *Fare: ₹${total}* Upto *${Math.round(usedKM)} Km*
+
+⚠ Toll, Parking & State Permit Charges Extra
+
+For Any Queries Call Us: 9345993885`;
 
 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
 method:"POST",
