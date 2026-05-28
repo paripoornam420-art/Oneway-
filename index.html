@@ -414,7 +414,7 @@ Write a Review
 <img src="https://razorpay.com/assets/razorpay-logo.svg" style="height:32px;">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo-vector.svg/512px-UPI-Logo-vector.svg.png" style="height:40px;">
 <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" style="height:30px;">
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" style="height:35px;">
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastecard-logo.svg" style="height:35px;">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/RuPay.svg/512px-RuPay.svg.png" style="height:35px;">
 
 </div>
@@ -596,10 +596,29 @@ btn.disabled=false;
 return;
 }
 /* CAR RATE SETUP */
-let perKm=13;
-if(carType==="Premium Sedan") perKm=14;
-if(carType==="SUV") perKm=19;
-if(carType==="Premium SUV") perKm=20;
+let perKm = 15;
+let driverBataRate = 400;
+
+/* ROUND TRIP RATE */
+if(trip === "round"){
+
+  perKm = 14;
+  driverBataRate = 500;
+
+  if(carType === "SUV") perKm = 19;
+  if(carType === "Premium SUV") perKm = 20;
+
+}
+
+/* ONEWAY RATE */
+else{
+
+  perKm = 15;
+
+  if(carType === "SUV") perKm = 20;
+  if(carType === "Premium SUV") perKm = 21;
+
+}
 
 const baseFare=400;
 
@@ -647,7 +666,7 @@ const start=new Date(date);
 const end=new Date(returnDate);
 const diffTime=end-start;
 const days=Math.floor(diffTime/(1000*60*60*24))+1;
-driverBata = days * 400;
+driverBata = days * driverBataRate;
 
 /* Thoothukudi 1 Day Special */
 if(isThoothukudi && days===1){

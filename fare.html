@@ -291,11 +291,26 @@ const serial = String(bookingCounter).padStart(3, "0");
 
 const bookingID = `${month}${year}${serial}`;
 
-const cars=[
-{name:"Any Sedan 4+1",rate:14,bata:300,badge:"Most Booked"},
-{name:"Premium Sedan",rate:14,bata:400},
-{name:"Any SUV 7+1",rate:19,bata:400},
-{name:"Premium SUV",rate:20,bata:400}
+const cars = [
+
+trip === "oneway"
+
+? {name:"Sedan 4+1",rate:15,bata:400,badge:"Most Booked"}
+
+: {name:"Sedan 4+1",rate:14,bata:500,badge:"Most Booked"},
+
+trip === "oneway"
+
+? {name:"SUV 6+1",rate:20,bata:400}
+
+: {name:"SUV 6+1",rate:19,bata:500},
+
+trip === "oneway"
+
+? {name:"SUV 7+1",rate:21,bata:400}
+
+: {name:"SUV 7+1",rate:20,bata:500}
+
 ];
 
 let html="";
@@ -514,9 +529,10 @@ const message =
 
 *${trip === "oneway" ? "Oneway" : "Round Trip"} Trip / ${car}*
 
-*•₹${car.includes("SUV")
-? car.includes("Premium") ? 20 : 19
-: 14}/KM / Bata ₹${car.includes("Sedan") ? 300 : 400}*
+*• ₹${trip==="oneway"
+? (car.includes("Sedan") ? 15 : car.includes("6+1") ? 20 : 21)
+: (car.includes("Sedan") ? 14 : car.includes("6+1") ? 19 : 20)
+}/KM / Bata ₹${trip==="oneway" ? 400 : 500}*
 
 💵 *Fare: ₹${total}* Upto *${Math.round(usedKM)} Km*
 
