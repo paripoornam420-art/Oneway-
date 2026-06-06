@@ -687,12 +687,21 @@ totalFare+=(extraHours*120);
 
 }
 
-/* Normal Multi-Day Round Trip */
+/* Normal Round Trip */
+
 else{
 
-const minKM=250*days;
-totalKM=Math.max(actualKM,minKM);
-totalFare=baseFare+(totalKM*perKm);
+/* Auto Return Distance */
+const roundTripKM = actualKM * 2;
+
+/* 250 KM Coverage Per Day */
+const minKM = 250 * days;
+
+/* Charge Actual KM if above coverage, otherwise minimum coverage */
+totalKM = Math.max(roundTripKM, minKM);
+
+/* Fare Calculation */
+totalFare = baseFare + (totalKM * perKm);
 
 }
 
@@ -779,7 +788,7 @@ text:msg
 /* REDIRECT */
 window.location.href =
 `fare.html?fare=${totalFare}` +
-`&km=${Math.round(actualKM)}` +
+`&km=${Math.round(totalKM)}` +
 `&pickup=${encodeURIComponent(pickup)}` +
 `&drop=${encodeURIComponent(drop)}` +
 `&trip=${trip}` +
