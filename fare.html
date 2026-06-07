@@ -338,8 +338,17 @@ let tripText = trip === "oneway"
  ? displayKM
  : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
 
-let total = Math.round((usedKM * car.rate) + car.bata);
-
+let total = Math.round(
+  (usedKM * car.rate) +
+  (car.bata * days)
+);
+console.log(
+"Days:", days,
+"Rate:", car.rate,
+"KM:", usedKM,
+"Bata:", car.bata * days,
+"Total:", total
+);
 html+=`
 <div class="card">
 
@@ -515,7 +524,7 @@ const message =
 *• ₹${trip==="oneway"
 ? (car.includes("Sedan") ? 15 : car.includes("6+1") ? 20 : 21)
 : (car.includes("Sedan") ? 14 : car.includes("6+1") ? 19 : 20)
-}/KM / Bata ₹${trip==="oneway" ? 400 : 500}*
+}/KM / Bata ₹${trip==="oneway" ? 400 : (500 * days)}*
 
 💵 *Fare: ₹${total}* Upto *${Math.round(usedKM)} Km*
 
