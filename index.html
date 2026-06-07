@@ -603,10 +603,18 @@ let driverBataRate = 400;
 if(trip === "round"){
 
   perKm = 14;
-  driverBataRate = 500;
 
-  if(carType === "SUV") perKm = 19;
-  if(carType === "Premium SUV") perKm = 20;
+  driverBataRate = 400; // Sedan
+
+  if(carType === "SUV"){
+    perKm = 19;
+    driverBataRate = 500;
+  }
+
+  if(carType === "Premium SUV"){
+    perKm = 20;
+    driverBataRate = 500;
+  }
 
 }
 
