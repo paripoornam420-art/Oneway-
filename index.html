@@ -8,7 +8,7 @@
   <link rel="preload" as="image"
 href="https://raw.githubusercontent.com/paripoornam420-art/Oneway-/main/logo.png">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="theme-color" content="#FFD000">
+<meta name="theme-color" content="#FFFFFF">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Bell Taxi offers Oneway Taxi, Drop Taxi, Round Trip & Outstation Cabs across Tamil Nadu. Safe, Affordable & 24x7 Taxi Service. Call 8110000796">
@@ -594,6 +594,22 @@ if(trip === "round" && !returnDate){
 alert("Please select return date for round trip.");
 btn.disabled=false;
 return;
+}
+const allowed = [
+  "tamil nadu",
+  "tamilnadu",
+  "bangalore",
+  "bengaluru",
+  "tiruvananthapuram",
+  "trivandrum",
+  "kochi",
+  "cochin"
+];
+
+if (!allowed.some(city => pickup.toLowerCase().includes(city))) {
+  alert("❌ Our service is not available in this city.");
+  btn.disabled = false;
+  return;
 }
 /* CAR RATE SETUP */
 let perKm = 15;
