@@ -338,10 +338,17 @@ let tripText = trip === "oneway"
  ? displayKM
  : displayKM + " (" + days + " Day" + (days>1?"s":"") + ")";
 
-let total = Math.round(
-  (usedKM * car.rate) +
-  (car.bata * days)
-);
+const finalFare = parseInt(params.get("fare")) || 0;
+
+let total = finalFare;
+
+if (car.name.includes("SUV 6+1")) {
+    total += trip === "oneway" ? (20 - 15) * usedKM : (19 - 14) * usedKM;
+}
+
+if (car.name.includes("SUV 7+1")) {
+    total += trip === "oneway" ? (21 - 15) * usedKM : (20 - 14) * usedKM;
+}
 console.log(
 "Days:", days,
 "Rate:", car.rate,
