@@ -538,14 +538,23 @@ const carType=document.getElementById("carType")?.value || "Sedan";
 let hillCharge = 0;
 let driverBata = 0;
 
-const pickupCity = pickup.toLowerCase();
-const dropCity = drop.toLowerCase();
+const route = (pickup + " " + drop).toLowerCase();
 
-hillStations.forEach(city=>{
-if(pickupCity.includes(city) || dropCity.includes(city)){
-hillCharge = 300;
+const hillStations = [
+  "kodaikanal",
+  "ooty",
+  "udhagamandalam",
+  "yercaud",
+  "valparai",
+  "munnar",
+  "thekkady",
+  "vagamon",
+  "ponmudi"
+];
+
+if (hillStations.some(place => route.includes(place))) {
+  hillCharge = 300;
 }
-});
 
 let valid=true;
 
